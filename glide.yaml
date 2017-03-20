@@ -1,0 +1,3 @@
+package: github.com/bronzdoc/skeletor
+import:
+- package: gopkg.in/yaml.v2
