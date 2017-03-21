@@ -6,23 +6,23 @@ import (
 	"log"
 )
 
-type template struct {
+type Template struct {
 	Context  string
-	Skeleton []map[string]string
+	Skeleton []map[string]interface{}
 }
 
-func New(filepath string) *template {
-	t := template{}
+func New(filepath string) *Template {
+	t := Template{}
 	data, err := ioutil.ReadFile(filepath)
 
 	if err != nil {
 		log.Fatal(err)
-		return &template{}
+		return &Template{}
 	}
 
 	if err = yaml.Unmarshal(data, &t); err != nil {
 		log.Fatal(err)
-		return &template{}
+		return &Template{}
 	}
 
 	return &t
