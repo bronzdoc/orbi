@@ -17,7 +17,6 @@ func New(filepath string) *Template {
 
 	if err != nil {
 		log.Fatal(err)
-		return &Template{}
 	}
 
 	if err = yaml.Unmarshal(data, &t); err != nil {
