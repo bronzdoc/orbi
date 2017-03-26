@@ -1,28 +1,42 @@
 package template
 
 import (
-	"gopkg.in/yaml.v2"
+	"io"
 	"io/ioutil"
-	"log"
+	"os"
+	"text/template"
 )
 
 type Template struct {
-	Context  string
-	Skeleton []map[string]interface{}
+	name string
+	path string
+	vars map[string]interface{}
 }
 
-func New(filepath string) *Template {
-	t := Template{}
-	data, err := ioutil.ReadFile(filepath)
+func New(name, template_path string) *Template {
+	return &Template{
+		name: name,
+		path: template_path,
+	}
+}
 
-	if err != nil {
-		log.Fatal(err)
+func (t *Template) Create(w io.Writer, vars map[string]string) (*Template, error) {
+	if _, err := os.Stat(t.path); err == nil {
+		tmpl_content, err := ioutil.ReadFile(t.path)
+		if err != nil {
+			return t, err
+		}
+
+		tmpl, err := template.New(t.name).Option("missingkey=error").Parse(string(tmpl_content))
+		if err != nil {
+			return t, err
+		}
+
+		err = tmpl.Execute(w, vars)
+		if err != nil {
+			return t, err
+		}
 	}
 
-	if err = yaml.Unmarshal(data, &t); err != nil {
-		log.Fatal(err)
-		return &Template{}
-	}
-
-	return &t
+	return t, nil
 }
