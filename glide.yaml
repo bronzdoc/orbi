@@ -1,3 +1,6 @@
 package: github.com/bronzdoc/skeletor
 import:
 - package: gopkg.in/yaml.v2
+- package: github.com/spf13/cobra
+  subpackages:
+  - cobra

@@ -1,6 +1,10 @@
-hash: a61d94e1d4a1a6d1aa9e8bb204717a50e5f5ec417127e31462ee7a64278be61f
-updated: 2017-03-19T18:09:28.439895695-06:00
+hash: ccd08770e6e273394ca40583b3a48f62d53f7f9a8024dc1c812806f845707ecd
+updated: 2017-04-03T19:09:02.64668952-06:00
 imports:
+- name: github.com/spf13/cobra
+  version: 0f056af21f5f368e5b0646079d0094a2c64150f7
+  subpackages:
+  - cobra
 - name: gopkg.in/yaml.v2
   version: a3f3340b5840cee44f372bddb5880fcbc419b46a
 testImports: []
