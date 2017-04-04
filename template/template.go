@@ -1,6 +1,7 @@
 package template
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -44,9 +45,15 @@ func (t *Template) Create(w io.Writer) (*Template, error) {
 		}
 
 		if len(missing_vars) > 0 {
+			var err_msg bytes.Buffer
+			for _, missing_var := range missing_vars {
+				err_msg.WriteString("{{" + "." + missing_var + "}}\n")
+			}
+
 			return t, fmt.Errorf(
-				"Missing template variables: %s",
-				missing_vars,
+				"%s: Missing template variables:\n%s",
+				t.path,
+				err_msg.String(),
 			)
 		}
 
