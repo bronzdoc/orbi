@@ -48,7 +48,7 @@ func (s *skeleton) Create() {
 						f := create_file(file_path)
 						defer f.Close()
 						template_path := os.Getenv("HOME") + "/" + ".skeletor/templates" + "/" + filename
-						_, err := template.New(filename, template_path).Create(f, s.vars)
+						_, err := template.New(filename, template_path, s.vars).Create(f)
 						if err != nil {
 							log.Fatal(err)
 						}
