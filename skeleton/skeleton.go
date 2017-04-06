@@ -1,7 +1,7 @@
 package skeleton
 
 import (
-	"github.com/bronzdoc/skeletor/template"
+	"github.com/bronzdoc/symbiote/template"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
@@ -47,7 +47,7 @@ func (s *skeleton) Create() {
 						file_path := context + "/" + dir_name.(string) + "/" + filename
 						f := create_file(file_path)
 						defer f.Close()
-						template_path := os.Getenv("HOME") + "/" + ".skeletor/templates" + "/" + filename
+						template_path := os.Getenv("HOME") + "/" + ".symbiote/templates" + "/" + filename
 						_, err := template.New(filename, template_path, s.vars).Create(f)
 						if err != nil {
 							log.Fatal(err)
