@@ -1,4 +1,4 @@
-package skeleton
+package definition
 
 import (
 	"github.com/bronzdoc/symbiote/template"
@@ -8,29 +8,29 @@ import (
 	"os"
 )
 
-type skeleton struct {
+type definition struct {
 	Context   string
 	Resources []map[string]interface{}
 	vars      map[string]string
 }
 
-func New(skeleton_file string, vars map[string]string) *skeleton {
-	sk := skeleton{}
-	sk.vars = vars
-	data, err := ioutil.ReadFile(skeleton_file)
+func New(definition_file string, vars map[string]string) *definition {
+	def := definition{}
+	def.vars = vars
+	data, err := ioutil.ReadFile(definition_file)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if err = yaml.Unmarshal(data, &sk); err != nil {
+	if err = yaml.Unmarshal(data, &def); err != nil {
 		log.Fatal(err)
 	}
 
-	return &sk
+	return &def
 }
 
-func (s *skeleton) Create() {
+func (s *definition) Create() {
 	resources := s.Resources
 	context := s.Context
 
@@ -47,7 +47,7 @@ func (s *skeleton) Create() {
 						file_path := context + "/" + dir_name.(string) + "/" + filename
 						f := create_file(file_path)
 						defer f.Close()
-						template_path := os.Getenv("HOME") + "/" + ".symbiote/templates" + "/" + filename
+						template_path := os.Getenv("HOME") + "/" + ".definitions/templates" + "/" + filename
 						_, err := template.New(filename, template_path, s.vars).Create(f)
 						if err != nil {
 							log.Fatal(err)
