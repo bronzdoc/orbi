@@ -1,22 +1,36 @@
 package definition
 
-import r "github.com/bronzdoc/symbiote/definition/resource"
-
 type tree struct {
-	root r.Resource
+	root Resource
 }
 
 func NewTree(kv_resources []map[interface{}]interface{}) *tree {
-	resource := &r.Directory{
-		Name:     ".",
-		Children: generate(kv_resources),
+	resource := &Directory{
+		name:     ".",
+		children: generate(kv_resources),
 	}
 	return &tree{root: resource}
 }
 
-// Generates a r.Resource hierarchy
-func generate(kv_resources []map[interface{}]interface{}) []r.Resource {
-	var resources []r.Resource
+func (t *tree) Traverse(action func(r Resource)) {
+	traverse(t.root, action)
+}
+
+// Traverse the tree and yield each node to a function
+func traverse(r Resource, action func(r Resource)) {
+	if r.Children() == nil {
+		return
+	}
+
+	for _, node := range r.Children() {
+		action(node)
+		traverse(node, action)
+	}
+}
+
+// Generates a Resource hierarchy
+func generate(kv_resources []map[interface{}]interface{}) []Resource {
+	var resources []Resource
 	for _, resource := range kv_resources {
 		for key, data := range resource {
 			if key == "dir" {
@@ -27,9 +41,9 @@ func generate(kv_resources []map[interface{}]interface{}) []r.Resource {
 					a_data,
 				}
 
-				resources = append(resources, &r.Directory{
-					Name:     name,
-					Children: generate(dir_resources),
+				resources = append(resources, &Directory{
+					name:     name,
+					children: generate(dir_resources),
 				})
 
 			} else if key == "files" {
@@ -42,11 +56,11 @@ func generate(kv_resources []map[interface{}]interface{}) []r.Resource {
 	return resources
 }
 
-// Convert a []string to []r.Resource
-func getFileResources(file_names []string) []r.Resource {
-	var resources []r.Resource
+// Convert a []string to []Resource
+func getFileResources(file_names []string) []Resource {
+	var resources []Resource
 	for _, file := range file_names {
-		resources = append(resources, &r.File{Name: file})
+		resources = append(resources, &File{name: file})
 	}
 	return resources
 }
