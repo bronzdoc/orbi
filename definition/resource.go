@@ -5,10 +5,12 @@ type Resource interface {
 	Name() string
 	setName(string)
 	Children() []Resource
+	Id() string
 }
 
 type Directory struct {
 	name     string
+	id       string
 	children []Resource
 }
 
@@ -28,7 +30,14 @@ func (d *Directory) Children() []Resource {
 	return d.children
 }
 
-type File struct{ name string }
+func (d *Directory) Id() string {
+	return d.id
+}
+
+type File struct {
+	name string
+	id   string
+}
 
 func (f *File) Create() string {
 	return "ssd"
@@ -44,4 +53,8 @@ func (f *File) setName(name string) {
 
 func (f *File) Children() []Resource {
 	return nil
+}
+
+func (f *File) Id() string {
+	return f.id
 }

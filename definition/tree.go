@@ -5,13 +5,17 @@ type tree struct {
 }
 
 func NewTree(kv_resources []map[interface{}]interface{}) *tree {
+	name := "."
+	id := name
 	resource := &Directory{
-		name:     ".",
-		children: generate(kv_resources),
+		name:     name,
+		id:       id,
+		children: generate(id, kv_resources),
 	}
 	return &tree{root: resource}
 }
 
+// Traverse public method
 func (t *tree) Traverse(action func(r Resource)) {
 	traverse(t.root, action)
 }
@@ -29,13 +33,14 @@ func traverse(r Resource, action func(r Resource)) {
 }
 
 // Generates a Resource hierarchy
-func generate(kv_resources []map[interface{}]interface{}) []Resource {
+func generate(resource_id string, kv_resources []map[interface{}]interface{}) []Resource {
 	var resources []Resource
 	for _, resource := range kv_resources {
 		for key, data := range resource {
 			if key == "dir" {
 				a_data := data.(map[interface{}]interface{})
 				name := a_data["name"].(string)
+				id := resource_id + "/" + name
 
 				dir_resources := []map[interface{}]interface{}{
 					a_data,
@@ -43,12 +48,13 @@ func generate(kv_resources []map[interface{}]interface{}) []Resource {
 
 				resources = append(resources, &Directory{
 					name:     name,
-					children: generate(dir_resources),
+					id:       id,
+					children: generate(id, dir_resources),
 				})
 
 			} else if key == "files" {
 				a_data := data.([]interface{})
-				files := getFileResources(filesStringify(a_data))
+				files := getFileResources(resource_id, filesStringify(a_data))
 				resources = append(resources, files...)
 			}
 		}
@@ -57,10 +63,14 @@ func generate(kv_resources []map[interface{}]interface{}) []Resource {
 }
 
 // Convert a []string to []Resource
-func getFileResources(file_names []string) []Resource {
+func getFileResources(resource_id string, file_names []string) []Resource {
 	var resources []Resource
 	for _, file := range file_names {
-		resources = append(resources, &File{name: file})
+		id := resource_id + "/" + file
+		resources = append(resources, &File{
+			name: file,
+			id:   id,
+		})
 	}
 	return resources
 }
