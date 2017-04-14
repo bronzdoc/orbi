@@ -4,18 +4,17 @@ type tree struct {
 	root Resource
 }
 
-func NewTree(kv_resources []map[interface{}]interface{}) *tree {
-	name := "."
-	id := name
+// Creates a definition tree structure
+func newTree(context string, definition_resources []map[interface{}]interface{}) *tree {
 	resource := &Directory{
-		name:     name,
-		id:       id,
-		children: generate(id, kv_resources),
+		name:     context,
+		id:       context,
+		children: generate(context, definition_resources),
 	}
 	return &tree{root: resource}
 }
 
-// Traverse public method
+// Traverse the tree and yield each node to a function
 func (t *tree) Traverse(action func(r Resource)) {
 	traverse(t.root, action)
 }
@@ -32,10 +31,10 @@ func traverse(r Resource, action func(r Resource)) {
 	}
 }
 
-// Generates a Resource hierarchy
-func generate(resource_id string, kv_resources []map[interface{}]interface{}) []Resource {
+// Generates a definition Resource hierarchy
+func generate(resource_id string, definition_resources []map[interface{}]interface{}) []Resource {
 	var resources []Resource
-	for _, resource := range kv_resources {
+	for _, resource := range definition_resources {
 		for key, data := range resource {
 			if key == "dir" {
 				a_data := data.(map[interface{}]interface{})
@@ -79,7 +78,6 @@ func getFileResources(resource_id string, file_names []string) []Resource {
 func filesStringify(file_names []interface{}) []string {
 	var files []string
 	for _, file_name := range file_names {
-
 		files = append(files, file_name.(string))
 	}
 	return files
