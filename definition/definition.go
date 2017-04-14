@@ -1,21 +1,20 @@
 package definition
 
 import (
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
-
-	"gopkg.in/yaml.v2"
 )
 
-type definition struct {
+type Definition struct {
 	Context      string
 	Resources    []map[interface{}]interface{}
 	ResourceTree *tree
 	Options      map[string]interface{}
 }
 
-func New(definition_file string, options map[string]interface{}) *definition {
-	def := definition{Options: options}
+func New(definition_file string, options map[string]interface{}) *Definition {
+	def := Definition{Options: options}
 
 	definition_content, err := ioutil.ReadFile(definition_file)
 	if err != nil {
@@ -31,7 +30,7 @@ func New(definition_file string, options map[string]interface{}) *definition {
 	return &def
 }
 
-func (d *definition) Create() {
+func (d *Definition) Create() {
 	tree := d.ResourceTree
 	tree.Traverse(func(node Resource) {
 		node.Create(d.Options)
