@@ -1,9 +1,15 @@
 package definition
 
+import (
+	"log"
+	"os"
+
+	"github.com/bronzdoc/symbiote/template"
+)
+
 type Resource interface {
-	Create() string
+	Create(map[string]interface{})
 	Name() string
-	setName(string)
 	Children() []Resource
 	Id() string
 }
@@ -14,16 +20,12 @@ type Directory struct {
 	children []Resource
 }
 
-func (d *Directory) Create() string {
-	return "sdsd"
+func (d *Directory) Create(options map[string]interface{}) {
+	os.Mkdir(d.id, 0777)
 }
 
 func (d *Directory) Name() string {
 	return d.name
-}
-
-func (d *Directory) setName(name string) {
-	d.name = name
 }
 
 func (d *Directory) Children() []Resource {
@@ -39,16 +41,32 @@ type File struct {
 	id   string
 }
 
-func (f *File) Create() string {
-	return "ssd"
+func (f *File) Create(options map[string]interface{}) {
+	file, err := os.Create(f.id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	if f.hasTemplate() {
+		f.createTemplate(file, options["vars"].(map[string]string))
+	}
+}
+
+func (f *File) hasTemplate() bool {
+	_, err := os.Stat(f.id)
+	return err == nil
+}
+
+func (f *File) createTemplate(file *os.File, vars map[string]string) {
+	_, err := template.New(f.name, vars).Create(file)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func (f *File) Name() string {
 	return f.name
-}
-
-func (f *File) setName(name string) {
-	f.name = name
 }
 
 func (f *File) Children() []Resource {
