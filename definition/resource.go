@@ -1,10 +1,9 @@
 package definition
 
 import (
+	"github.com/bronzdoc/droid/template"
 	"log"
 	"os"
-
-	"github.com/bronzdoc/symbiote/template"
 )
 
 type Resource interface {
@@ -21,7 +20,7 @@ type Directory struct {
 }
 
 func (d *Directory) Create(options map[string]interface{}) {
-	os.Mkdir(d.id, 0777)
+	os.Mkdir(d.id, 0776)
 }
 
 func (d *Directory) Name() string {
@@ -48,18 +47,25 @@ func (f *File) Create(options map[string]interface{}) {
 	}
 	defer file.Close()
 
-	if f.hasTemplate() {
-		f.createTemplate(file, options["vars"].(map[string]string))
+	// Check if there is a template for the file
+	templates_path := options["templates_path"].(string)
+	if f.hasTemplate(templates_path) {
+		vars := options["vars"].(map[string]string)
+		f.createTemplate(
+			file,
+			templates_path,
+			vars,
+		)
 	}
 }
 
-func (f *File) hasTemplate() bool {
-	_, err := os.Stat(f.id)
+func (f *File) hasTemplate(templates_path string) bool {
+	_, err := os.Stat(templates_path + "/" + f.name)
 	return err == nil
 }
 
-func (f *File) createTemplate(file *os.File, vars map[string]string) {
-	_, err := template.New(f.name, vars).Create(file)
+func (f *File) createTemplate(file *os.File, templates_path string, vars map[string]string) {
+	_, err := template.New(f.name, templates_path, vars).Create(file)
 	if err != nil {
 		log.Fatal(err)
 	}
