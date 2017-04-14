@@ -16,10 +16,10 @@ type Template struct {
 	vars map[string]string
 }
 
-func New(name, template_path string, vars map[string]string) *Template {
+func New(name, templates_path string, vars map[string]string) *Template {
 	return &Template{
 		name: name,
-		path: template_path,
+		path: templates_path + "/" + name,
 		vars: vars,
 	}
 }
