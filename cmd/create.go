@@ -9,26 +9,28 @@ import (
 )
 
 var createCmd = &cobra.Command{
-	Use:   "create TEMPLATE_NAME",
+	Use:   "create DEFINITION_NAME",
 	Short: "Creates a symbiote from a definition",
 	Run: func(cmd *cobra.Command, args []string) {
-		var template_name string
+		var definition_name string
 
 		if len(args) > 0 {
-			template_name = args[0]
+			definition_name = args[0]
 		} else {
 			err := fmt.Errorf("sym create expects a definition name, see sym create --help")
 			log.Fatal(err)
 		}
 
-		template_path := fmt.Sprintf("/home/bronzdoc/.symbiote/%s.yml", template_name)
+		// TODO this should be in a config object
+		definition_path := fmt.Sprintf("/home/bronzdoc/.droid/%s.yml", definition_name)
 
-		data, err := vars.Parse(Vars)
+		vars, err := vars.Parse(Vars)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		definition.New(template_path, data).Create()
+		options := map[string]interface{}{"vars": vars}
+		definition.New(definition_path, options).Create()
 	},
 }
 
@@ -36,5 +38,5 @@ var Vars string
 
 func init() {
 	RootCmd.AddCommand(createCmd)
-	createCmd.Flags().StringVarP(&Vars, "vars", "", "", "template arguments KEY=VALUE")
+	createCmd.Flags().StringVarP(&Vars, "vars", "", "", "definition arguments KEY=VALUE")
 }
