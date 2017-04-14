@@ -31,7 +31,7 @@ func (t *Template) Create(w io.Writer) (*Template, error) {
 			return t, err
 		}
 
-		var_names, err := find_vars(string(tmpl_content))
+		var_names, err := findVars(string(tmpl_content))
 		if err != nil {
 			return t, err
 		}
@@ -57,7 +57,9 @@ func (t *Template) Create(w io.Writer) (*Template, error) {
 			)
 		}
 
-		tmpl, err := template.New(t.name).Option("missingkey=error").Parse(string(tmpl_content))
+		tmpl, err := template.New(t.name).Option("missingkey=error").Parse(
+			string(tmpl_content),
+		)
 		if err != nil {
 			return t, err
 		}
@@ -71,7 +73,7 @@ func (t *Template) Create(w io.Writer) (*Template, error) {
 	return t, nil
 }
 
-func find_vars(template_content string) ([]string, error) {
+func findVars(template_content string) ([]string, error) {
 	var vars []string
 
 	regex, err := regexp.Compile(`\s?{{\.[a-zA-Z0-9][a-zA-Z0-9]*}}`)
