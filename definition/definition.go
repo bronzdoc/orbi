@@ -1,9 +1,10 @@
 package definition
 
 import (
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
+
+	"gopkg.in/yaml.v2"
 )
 
 type Definition struct {
@@ -13,10 +14,34 @@ type Definition struct {
 	Options      map[string]interface{}
 }
 
-func New(definition_file string, options map[string]interface{}) *Definition {
+func New(definition_format interface{}, options map[string]interface{}) *Definition {
+	var def *Definition
+
+	switch df_type := definition_format.(type) {
+	default:
+		log.Fatalf("%s: Is an invalid format type to create a definition", df_type)
+	case string:
+		def = newFromFileName(definition_format.(string), options)
+	case map[interface{}]interface{}:
+		def = newFromMap(definition_format.(map[interface{}]interface{}), options)
+	}
+
+	def.ResourceTree = newTree(def.Context, def.Resources)
+
+	return def
+}
+
+func (d *Definition) Create() {
+	tree := d.ResourceTree
+	tree.Traverse(func(r Resource) {
+		r.Create(d.Options)
+	})
+}
+
+func newFromFileName(file_name string, options map[string]interface{}) *Definition {
 	def := Definition{Options: options}
 
-	definition_content, err := ioutil.ReadFile(definition_file)
+	definition_content, err := ioutil.ReadFile(file_name)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -25,14 +50,13 @@ func New(definition_file string, options map[string]interface{}) *Definition {
 		log.Fatal(err)
 	}
 
-	def.ResourceTree = newTree(def.Context, def.Resources)
-
 	return &def
 }
 
-func (d *Definition) Create() {
-	tree := d.ResourceTree
-	tree.Traverse(func(node Resource) {
-		node.Create(d.Options)
-	})
+func newFromMap(map_definition map[interface{}]interface{}, options map[string]interface{}) *Definition {
+	return &Definition{
+		Context:   map_definition["context"].(string),
+		Resources: map_definition["resources"].([]map[interface{}]interface{}),
+		Options:   options,
+	}
 }
