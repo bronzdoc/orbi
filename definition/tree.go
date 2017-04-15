@@ -19,7 +19,7 @@ func (t *tree) Traverse(action func(r Resource)) {
 	traverse(t.root, action)
 }
 
-// Traverse the tree and yield each node to a function
+// Traverse the tree and yield each resource to a function
 func traverse(r Resource, action func(r Resource)) {
 	if r.Children() == nil {
 		return
