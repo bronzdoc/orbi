@@ -35,7 +35,6 @@ var execCmd = &cobra.Command{
 			),
 		}
 
-		// TODO this should be in a config object
 		plan := plan.PlanFactory(plan_name, options)
 		plan.Execute()
 	},
@@ -45,5 +44,5 @@ var Vars string
 
 func init() {
 	RootCmd.AddCommand(execCmd)
-	execCmd.Flags().StringVarP(&Vars, "vars", "", "", "definition arguments KEY=VALUE")
+	execCmd.Flags().StringVarP(&Vars, "vars", "", "", "template vars KEY=VALUE")
 }
