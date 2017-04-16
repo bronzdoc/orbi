@@ -28,7 +28,7 @@ func (p *Plan) Execute() {
 	p.definition.Create()
 }
 
-// Get a definition oject for a new plan
+// Get a definition object for a new plan
 func PlanDefinition(plan_name string, options map[string]interface{}) *definition.Definition {
 	// Default structure for a new plan
 	resources := []map[interface{}]interface{}{
@@ -50,8 +50,28 @@ func PlanDefinition(plan_name string, options map[string]interface{}) *definitio
 		"resources": resources,
 	}
 
-	return definition.New(
-		map_definition,
-		options,
+	/* TODO this is a nasty hack to get de definition.yml resource,
+	   implement search on definition to do this properly */
+	def := definition.New(map_definition, options)
+	dir := def.ResourceTree.Root.Children()[0].Children()
+	file := func() definition.Resource {
+		for _, resource := range dir {
+			if resource.Name() == "definition.yml" {
+				return resource
+			}
+		}
+		return nil
+	}()
+
+	file.(*definition.File).SetContent(
+		[]byte(`---
+context: .
+resources:
+  - dir:
+     name: dir_name_sample
+     files:
+      - file_name_sample`),
 	)
+
+	return def
 }
