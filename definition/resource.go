@@ -1,7 +1,7 @@
 package definition
 
 import (
-	"github.com/bronzdoc/droid/template"
+	"io/ioutil"
 	"log"
 	"os"
 )
@@ -36,39 +36,52 @@ func (d *Directory) Id() string {
 }
 
 type File struct {
-	name string
-	id   string
+	name    string
+	id      string
+	content []byte
 }
 
 func (f *File) Create(options map[string]interface{}) {
+
 	file, err := os.Create(f.id)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer file.Close()
 
-	// Check if there is a template for the file
-	templates_path := options["templates_path"].(string)
-	if f.hasTemplate(templates_path) {
-		vars := options["vars"].(map[string]string)
-		f.createTemplate(
-			file,
-			templates_path,
-			vars,
-		)
+	// TODO improve how a definition.template and a definition.File interacts
+	if f.isContentEmpty() {
+		templates_path := options["templates_path"].(string)
+
+		// Check if there is a template for the file
+		if f.hasTemplate(templates_path) {
+			vars := options["vars"].(map[string]string)
+			path := templates_path + "/" + f.name
+
+			content, err := ioutil.ReadFile(path)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			NewTemplate(f.name, content, vars).Execute(file)
+		}
+	} else {
+		var vars map[string]string
+		NewTemplate(f.name, f.content, vars).Execute(file)
 	}
+}
+
+func (f *File) SetContent(content []byte) {
+	f.content = content
+}
+
+func (f *File) isContentEmpty() bool {
+	return f.content == nil
 }
 
 func (f *File) hasTemplate(templates_path string) bool {
 	_, err := os.Stat(templates_path + "/" + f.name)
 	return err == nil
-}
-
-func (f *File) createTemplate(file *os.File, templates_path string, vars map[string]string) {
-	_, err := template.New(f.name, templates_path, vars).Create(file)
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 func (f *File) Name() string {
