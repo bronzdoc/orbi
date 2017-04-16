@@ -3,6 +3,7 @@ package definition
 import (
 	"io/ioutil"
 	"log"
+	"strings"
 
 	"gopkg.in/yaml.v2"
 )
@@ -36,6 +37,27 @@ func (d *Definition) Create() {
 	tree.Traverse(func(r Resource) {
 		r.Create(d.Options)
 	})
+}
+
+func (d *Definition) Search(pattern string) Resource {
+	strings_to_match := strings.Split(pattern, ":")
+	match_counter := 0
+	var resource_wanted Resource
+
+	tree := d.ResourceTree
+	tree.Traverse(func(r Resource) {
+		if r.Name() == strings_to_match[match_counter] {
+			match_counter += 1
+		} else {
+			match_counter = 0
+		}
+
+		if match_counter == len(strings_to_match) {
+			resource_wanted = r
+			return
+		}
+	})
+	return resource_wanted
 }
 
 func newFromFileName(file_name string, options map[string]interface{}) *Definition {
