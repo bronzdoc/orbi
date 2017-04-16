@@ -2,6 +2,7 @@ package plan
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 
 	"github.com/bronzdoc/droid/definition"
@@ -26,6 +27,14 @@ func PlanFactory(plan_name string, options map[string]interface{}) *Plan {
 
 func (p *Plan) Execute() {
 	p.definition.Create()
+}
+
+func List() {
+	plans_path := fmt.Sprintf("%s/.droid/plans/", os.Getenv("HOME"))
+	files, _ := ioutil.ReadDir(plans_path)
+	for _, f := range files {
+		fmt.Println(f.Name())
+	}
 }
 
 // Get a definition object for a new plan
