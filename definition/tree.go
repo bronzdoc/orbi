@@ -1,7 +1,7 @@
 package definition
 
 type tree struct {
-	root Resource
+	Root Resource
 }
 
 // Creates a definition tree structure
@@ -11,12 +11,12 @@ func newTree(context string, definition_resources []map[interface{}]interface{})
 		id:       context,
 		children: generate(context, definition_resources),
 	}
-	return &tree{root: resource}
+	return &tree{Root: resource}
 }
 
 // Traverse the tree and yield each node to a function
 func (t *tree) Traverse(action func(r Resource)) {
-	traverse(t.root, action)
+	traverse(t.Root, action)
 }
 
 // Traverse the tree and yield each resource to a function
