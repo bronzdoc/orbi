@@ -50,20 +50,11 @@ func PlanDefinition(plan_name string, options map[string]interface{}) *definitio
 		"resources": resources,
 	}
 
-	/* TODO this is a nasty hack to get de definition.yml resource,
-	   implement search on definition to do this properly */
 	def := definition.New(map_definition, options)
-	dir := def.ResourceTree.Root.Children()[0].Children()
-	file := func() definition.Resource {
-		for _, resource := range dir {
-			if resource.Name() == "definition.yml" {
-				return resource
-			}
-		}
-		return nil
-	}()
+	resource := def.Search(plan_name + ":" + "templates:definition.yml")
 
-	file.(*definition.File).SetContent(
+	file := resource.(*definition.File)
+	file.SetContent(
 		[]byte(`---
 context: .
 resources:
