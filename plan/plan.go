@@ -6,7 +6,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/bronzdoc/droid/definition"
+	"github.com/bronzdoc/orbi/definition"
 )
 
 type Plan struct {
@@ -21,7 +21,7 @@ func New(definition *definition.Definition) *Plan {
 
 func PlanFactory(plan_name string, options map[string]interface{}) *Plan {
 	// TODO this should be in a config object
-	definition_path := fmt.Sprintf("%s/.droid/plans/%s/definition.yml", os.Getenv("HOME"), plan_name)
+	definition_path := fmt.Sprintf("%s/.orbi/plans/%s/definition.yml", os.Getenv("HOME"), plan_name)
 	definition := definition.New(definition_path, options)
 	return New(definition)
 }
@@ -31,7 +31,7 @@ func (p *Plan) Execute() {
 }
 
 func List() {
-	plans_path := fmt.Sprintf("%s/.droid/plans/", os.Getenv("HOME"))
+	plans_path := fmt.Sprintf("%s/.orbi/plans/", os.Getenv("HOME"))
 	files, _ := ioutil.ReadDir(plans_path)
 	for _, f := range files {
 		fmt.Println(f.Name())
@@ -48,7 +48,7 @@ func Edit(plan_name string) error {
 		return fmt.Errorf(`$EDITOR is empty, could not edit "%s" plan.`, plan_name)
 	}
 
-	definition_path := fmt.Sprintf("%s/.droid/plans/%s/definition.yml", os.Getenv("HOME"), plan_name)
+	definition_path := fmt.Sprintf("%s/.orbi/plans/%s/definition.yml", os.Getenv("HOME"), plan_name)
 
 	cmd := exec.Command(editor, definition_path)
 	cmd.Stdin = os.Stdin
@@ -84,7 +84,7 @@ func PlanDefinition(plan_name string, options map[string]interface{}) *definitio
 	}
 
 	map_definition := map[interface{}]interface{}{
-		"context":   fmt.Sprintf("%s/.droid/plans/", os.Getenv("HOME")),
+		"context":   fmt.Sprintf("%s/.orbi/plans/", os.Getenv("HOME")),
 		"resources": resources,
 	}
 
@@ -106,7 +106,7 @@ resources:
 }
 
 func planExists(plan_name string) bool {
-	plans_path := fmt.Sprintf("%s/.droid/plans/", os.Getenv("HOME"))
+	plans_path := fmt.Sprintf("%s/.orbi/plans/", os.Getenv("HOME"))
 	files, _ := ioutil.ReadDir(plans_path)
 	for _, f := range files {
 		if f.Name() == plan_name {

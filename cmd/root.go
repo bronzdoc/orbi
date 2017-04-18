@@ -11,11 +11,18 @@ var cfgFile string
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-	Use: "sym",
-	Long: `Generate a symbiote based on a template
-	For example:
+	Use:   "orbi",
+	Short: `Generate a project structure based on a plan`,
+	Long: `
 
-	$ sym create symbiote`,
+     _
+   / o \  .-----------------------.
+   \   /  |      Bye from us!     |
+  -(\_/)- |          Chat soon.   |
+  \| x |/ '-----------------------'
+    \_/
+     ^
+	`,
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
@@ -33,7 +40,7 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports Persistent Flags, which, if defined here,
 	// will be global for your application.
-	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.symbiote.yaml)")
+	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.orbi/config.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -46,9 +53,9 @@ func initConfig() {
 		viper.SetConfigFile(cfgFile)
 	}
 
-	viper.SetConfigName(".symbiote") // name of config file (without extension)
-	viper.AddConfigPath("$HOME")     // adding home directory as first search path
-	viper.AutomaticEnv()             // read in environment variables that match
+	viper.SetConfigName(".config") // name of config file (without extension)
+	viper.AddConfigPath("$HOME")   // adding home directory as first search path
+	viper.AutomaticEnv()           // read in environment variables that match
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {

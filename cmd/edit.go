@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/bronzdoc/droid/plan"
+	"github.com/bronzdoc/orbi/plan"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +17,7 @@ var editCmd = &cobra.Command{
 		if len(args) > 0 {
 			plan_name = args[0]
 		} else {
-			err := fmt.Errorf("droid plan edit expects a plan name, see droid plan edit --help")
+			err := fmt.Errorf("orbi plan edit expects a plan name, see orbi plan edit --help")
 			log.Fatal(err)
 		}
 

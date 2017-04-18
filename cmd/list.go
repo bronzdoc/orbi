@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/bronzdoc/droid/plan"
+	"github.com/bronzdoc/orbi/plan"
 	"github.com/spf13/cobra"
 )
 

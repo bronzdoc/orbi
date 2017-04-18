@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/bronzdoc/droid/plan"
+	"github.com/bronzdoc/orbi/plan"
 	"github.com/spf13/cobra"
 )
 
@@ -18,13 +18,13 @@ var newCmd = &cobra.Command{
 		if len(args) > 0 {
 			plan_name = args[0]
 		} else {
-			err := fmt.Errorf("droid plan new expects a plan name, see droid plan new --help")
+			err := fmt.Errorf("orbi plan new expects a plan name, see orbi plan new --help")
 			log.Fatal(err)
 		}
 
 		options := map[string]interface{}{
 			"templates_path": fmt.Sprintf(
-				"%s/.droid/plans/%s/templates", os.Getenv("HOME"), plan_name,
+				"%s/.orbi/plans/%s/templates", os.Getenv("HOME"), plan_name,
 			),
 		}
 

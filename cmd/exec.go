@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/bronzdoc/droid/plan"
-	"github.com/bronzdoc/droid/vars"
+	"github.com/bronzdoc/orbi/plan"
+	"github.com/bronzdoc/orbi/vars"
 	"github.com/spf13/cobra"
 )
 
@@ -19,7 +19,7 @@ var execCmd = &cobra.Command{
 		if len(args) > 0 {
 			plan_name = args[0]
 		} else {
-			err := fmt.Errorf("droid exec expects a plan name, see droid exec --help")
+			err := fmt.Errorf("orbi exec expects a plan name, see orbi exec --help")
 			log.Fatal(err)
 		}
 
@@ -31,7 +31,7 @@ var execCmd = &cobra.Command{
 		options := map[string]interface{}{
 			"vars": vars,
 			"templates_path": fmt.Sprintf(
-				"%s/.droid/plans/%s/templates", os.Getenv("HOME"), plan_name,
+				"%s/.orbi/plans/%s/templates", os.Getenv("HOME"), plan_name,
 			),
 		}
 
