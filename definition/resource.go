@@ -19,6 +19,14 @@ type Directory struct {
 	children []Resource
 }
 
+func NewDirectory(name, id string, children []Resource) *Directory {
+	return &Directory{
+		name:     name,
+		id:       id,
+		children: children,
+	}
+}
+
 func (d *Directory) Create(options map[string]interface{}) {
 	os.Mkdir(d.id, 0776)
 }
