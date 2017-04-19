@@ -49,9 +49,17 @@ type File struct {
 	content []byte
 }
 
-func (f *File) Create(options map[string]interface{}) {
+func NewFile(name, id string, content []byte) *File {
+	return &File{
+		name:    name,
+		id:      id,
+		content: content,
+	}
+}
 
+func (f *File) Create(options map[string]interface{}) {
 	file, err := os.Create(f.id)
+
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -1,6 +1,7 @@
 package definition_test
 
 import (
+	"io/ioutil"
 	"log"
 	"os"
 
@@ -11,12 +12,16 @@ import (
 )
 
 var _ = Describe("Resource", func() {
-	var directory *Directory
+	BeforeSuite(func() {
+		os.Mkdir("./test-resource", 0777)
+	})
+
+	AfterSuite(func() {
+		os.RemoveAll("./test-resource")
+	})
 
 	Describe("Directory", func() {
-		BeforeSuite(func() {
-			os.Mkdir("./test-resource", 0777)
-		})
+		var directory *Directory
 
 		BeforeEach(func() {
 			directory = NewDirectory(
@@ -30,10 +35,6 @@ var _ = Describe("Resource", func() {
 					),
 				},
 			)
-		})
-
-		AfterSuite(func() {
-			os.Remove("./test-resource")
 		})
 
 		Describe("#Name", func() {
@@ -69,6 +70,59 @@ var _ = Describe("Resource", func() {
 		})
 	})
 
+	Describe("File", func() {
+		var file *File
+
+		BeforeEach(func() {
+			file = NewFile(
+				"tmp-file",
+				"./test-resource/tmp-file",
+				[]byte("Oooh, that's a bingo!"),
+			)
+		})
+
+		Describe("#Name", func() {
+			It("should return the correct name", func() {
+				Expect(file.Name()).To(Equal("tmp-file"))
+			})
+		})
+
+		Describe("#Id", func() {
+			It("should return the correct id", func() {
+				Expect(file.Id()).To(Equal("./test-resource/tmp-file"))
+			})
+		})
+
+		Describe("#Create", func() {
+			It("should create a file", func() {
+				file.Create(map[string]interface{}{})
+
+				file_exists, err := exists(file.Id())
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				Expect(file_exists).To(Equal(true))
+
+				content, err := ioutil.ReadFile("./test-resource/tmp-file")
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				Expect(content).To(Equal([]byte("Oooh, that's a bingo!")))
+			})
+		})
+
+		Describe("#Children", func() {
+			It("should return the correct children", func() {
+				var empty_resource []Resource
+				children := file.Children()
+
+				Expect(len(children)).To(Equal(0))
+				Expect(children).To(Equal(empty_resource))
+			})
+		})
+	})
 })
 
 func exists(path string) (bool, error) {
