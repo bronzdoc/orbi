@@ -11,7 +11,7 @@ import (
 type Definition struct {
 	Context      string
 	Resources    []map[interface{}]interface{}
-	ResourceTree *tree
+	ResourceTree *Tree
 	Options      map[string]interface{}
 }
 
@@ -27,7 +27,7 @@ func New(definition_format interface{}, options map[string]interface{}) *Definit
 		def = newFromMap(definition_format.(map[interface{}]interface{}), options)
 	}
 
-	def.ResourceTree = newTree(def.Context, def.Resources)
+	def.ResourceTree = NewTree(def.Context, def.Resources)
 
 	return def
 }

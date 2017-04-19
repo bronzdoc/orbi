@@ -1,21 +1,21 @@
 package definition
 
-type tree struct {
+type Tree struct {
 	root Resource
 }
 
 // Creates a definition tree structure
-func newTree(context string, definition_resources []map[interface{}]interface{}) *tree {
+func NewTree(context string, definition_resources []map[interface{}]interface{}) *Tree {
 	resource := &Directory{
 		name:     context,
 		id:       context,
 		children: generate(context, definition_resources),
 	}
-	return &tree{root: resource}
+	return &Tree{root: resource}
 }
 
 // Traverse the tree and yield each node to a function
-func (t *tree) Traverse(action func(r Resource)) {
+func (t *Tree) Traverse(action func(r Resource)) {
 	traverse(t.root, action)
 }
 
