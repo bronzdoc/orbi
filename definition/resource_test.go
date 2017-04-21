@@ -12,14 +12,6 @@ import (
 )
 
 var _ = Describe("Resource", func() {
-	BeforeSuite(func() {
-		os.Mkdir("./test-resource", 0777)
-	})
-
-	AfterSuite(func() {
-		os.RemoveAll("./test-resource")
-	})
-
 	Describe("Directory", func() {
 		var directory *Directory
 
