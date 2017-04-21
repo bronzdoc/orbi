@@ -22,7 +22,7 @@ func New(definition_format interface{}, options map[string]interface{}) *Definit
 	default:
 		log.Fatalf("%s: Is an invalid format type to create a definition", df_type)
 	case string:
-		def = newFromFileName(definition_format.(string), options)
+		def = newFromFile(definition_format.(string), options)
 	case map[interface{}]interface{}:
 		def = newFromMap(definition_format.(map[interface{}]interface{}), options)
 	}
@@ -60,7 +60,7 @@ func (d *Definition) Search(pattern string) Resource {
 	return resource_wanted
 }
 
-func newFromFileName(file_name string, options map[string]interface{}) *Definition {
+func newFromFile(file_name string, options map[string]interface{}) *Definition {
 	def := Definition{Options: options}
 
 	definition_content, err := ioutil.ReadFile(file_name)
