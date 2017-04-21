@@ -28,6 +28,12 @@ var _ = Describe("Tree", func() {
 		tree = NewTree("./test-resource", resources)
 	})
 
+	Describe("#Root", func() {
+		It("should return the correct resource", func() {
+			Expect(tree.Root().Name()).To(Equal("./test-resource"))
+		})
+	})
+
 	Describe("#Traverse", func() {
 		It("should yield each resource to a function", func() {
 			resource_counter := 0
@@ -45,7 +51,6 @@ var _ = Describe("Tree", func() {
 						}
 					}
 				}(r)
-
 			})
 
 			Expect(resource_counter).To(Equal(3))

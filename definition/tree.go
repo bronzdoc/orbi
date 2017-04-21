@@ -14,6 +14,10 @@ func NewTree(context string, definition_resources []map[interface{}]interface{})
 	return &Tree{root: resource}
 }
 
+func (t *Tree) Root() Resource {
+	return t.root
+}
+
 // Traverse the tree and yield each node to a function
 func (t *Tree) Traverse(action func(r Resource)) {
 	traverse(t.root, action)
