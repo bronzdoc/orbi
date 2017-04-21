@@ -34,7 +34,10 @@ var _ = Describe("Definition", func() {
 			"resources": resources,
 		}
 
-		var options map[string]interface{}
+		options := map[string]interface{}{
+			"templates_path": "./tmp/templates_path",
+		}
+
 		definition = New(map_definition, options)
 	})
 
@@ -63,6 +66,17 @@ resources:
 			Expect(result).To(Equal(true))
 		})
 	})
+
+	Describe("#Create", func() {
+		It("should create the defined resources", func() {
+			definition.Create()
+			definition.ResourceTree.Traverse(func(r Resource) {
+				file_exists, _ := exists(r.Id())
+				Expect(file_exists).To(Equal(true))
+			})
+		})
+	})
+
 })
 
 func equal(a, b *Definition) bool {
