@@ -77,6 +77,12 @@ resources:
 		})
 	})
 
+	Describe("#Search", func() {
+		It("should return the correct resource", func() {
+			resource := definition.Search("tmp-dir/tmp-file-child")
+			Expect(resource.Name()).To(Equal("tmp-file-child"))
+		})
+	})
 })
 
 func equal(a, b *Definition) bool {
