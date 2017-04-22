@@ -3,7 +3,6 @@ package definition_test
 import (
 	"io/ioutil"
 	"log"
-	"os"
 
 	. "github.com/bronzdoc/orbi/definition"
 
@@ -91,6 +90,7 @@ var _ = Describe("Resource", func() {
 
 				file_exists, err := exists(file.Id())
 				if err != nil {
+					// Todo  change to Fail(err)
 					log.Fatal(err)
 				}
 
@@ -116,14 +116,3 @@ var _ = Describe("Resource", func() {
 		})
 	})
 })
-
-func exists(path string) (bool, error) {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true, nil
-	}
-	if os.IsNotExist(err) {
-		return false, nil
-	}
-	return true, err
-}
