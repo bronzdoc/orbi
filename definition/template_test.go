@@ -61,4 +61,23 @@ var _ = Describe("Template", func() {
 			})
 		})
 	})
+
+	Describe("#Name", func() {
+		It("should return the correct name", func() {
+			Expect(template.Name()).To(Equal("template_0"))
+		})
+	})
+
+	Describe("#Content", func() {
+		It("should return the correct content", func() {
+			Expect(template.Content()).To(Equal([]byte("Antonio Marga-reeeeeiiiiiiiiti.")))
+		})
+	})
+
+	Describe("#Vars", func() {
+		It("should return the correct vars", func() {
+			var nil_vars map[string]string
+			Expect(template.Vars()).To(Equal(nil_vars))
+		})
+	})
 })

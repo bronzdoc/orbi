@@ -50,7 +50,7 @@ func (t *Template) Content() []byte {
 	return t.content
 }
 
-func (t *Template) Vars(content []byte) map[string]string {
+func (t *Template) Vars() map[string]string {
 	return t.vars
 }
 
