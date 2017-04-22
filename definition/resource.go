@@ -79,7 +79,10 @@ func (f *File) Create(options map[string]interface{}) {
 				log.Fatal(err)
 			}
 
-			NewTemplate(f.name, content, vars).Execute(file)
+			_, err = NewTemplate(f.name, content, vars).Execute(file)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	} else {
 		var vars map[string]string
