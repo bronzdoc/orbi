@@ -23,6 +23,26 @@ func NewTemplate(name string, content []byte, vars map[string]string) *Template 
 	}
 }
 
+func (t *Template) Execute(w io.Writer) (*Template, error) {
+	if err := t.validateVars(); err != nil {
+		log.Fatal(err)
+	}
+
+	tmpl, err := template.New(t.name).Option("missingkey=error").Parse(
+		string(t.content),
+	)
+	if err != nil {
+		return t, err
+	}
+
+	err = tmpl.Execute(w, t.vars)
+	if err != nil {
+		return t, err
+	}
+
+	return t, nil
+}
+
 func (t *Template) validateVars() error {
 	var_names, err := findVars(string(t.content))
 	if err != nil {
@@ -50,26 +70,6 @@ func (t *Template) validateVars() error {
 		)
 	}
 	return nil
-}
-
-func (t *Template) Execute(w io.Writer) (*Template, error) {
-	if err := t.validateVars(); err != nil {
-		log.Fatal(err)
-	}
-
-	tmpl, err := template.New(t.name).Option("missingkey=error").Parse(
-		string(t.content),
-	)
-	if err != nil {
-		return t, err
-	}
-
-	err = tmpl.Execute(w, t.vars)
-	if err != nil {
-		return t, err
-	}
-
-	return t, nil
 }
 
 func findVars(template_content string) ([]string, error) {
