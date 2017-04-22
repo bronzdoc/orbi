@@ -89,7 +89,7 @@ func PlanDefinition(plan_name string, options map[string]interface{}) *definitio
 	}
 
 	def := definition.New(map_definition, options)
-	resource := def.Search(plan_name + ":" + "templates:definition.yml")
+	resource := def.Search(plan_name + "/" + "definition.yml")
 
 	file := resource.(*definition.File)
 	file.SetContent(
