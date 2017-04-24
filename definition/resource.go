@@ -90,6 +90,10 @@ func (f *File) Create(options map[string]interface{}) {
 	}
 }
 
+func (f *File) Content() []byte {
+	return f.content
+}
+
 func (f *File) SetContent(content []byte) {
 	f.content = content
 }

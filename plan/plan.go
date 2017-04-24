@@ -9,6 +9,10 @@ import (
 	"github.com/bronzdoc/orbi/definition"
 )
 
+// Have higher control of exec.Command,
+// this will allow us to mock it easier in tests...
+var ExecCommand = exec.Command
+
 type Plan struct {
 	definition *definition.Definition
 }
@@ -30,12 +34,13 @@ func (p *Plan) Execute() {
 	p.definition.Create()
 }
 
-func List() {
+func List() (list []string) {
 	plans_path := fmt.Sprintf("%s/.orbi/plans/", os.Getenv("HOME"))
 	files, _ := ioutil.ReadDir(plans_path)
 	for _, f := range files {
-		fmt.Println(f.Name())
+		list = append(list, f.Name())
 	}
+	return list
 }
 
 func Edit(plan_name string) error {
@@ -49,8 +54,7 @@ func Edit(plan_name string) error {
 	}
 
 	definition_path := fmt.Sprintf("%s/.orbi/plans/%s/definition.yml", os.Getenv("HOME"), plan_name)
-
-	cmd := exec.Command(editor, definition_path)
+	cmd := ExecCommand(editor, definition_path)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
