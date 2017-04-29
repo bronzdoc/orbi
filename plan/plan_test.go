@@ -120,6 +120,11 @@ resources:
 
 		})
 	})
+
+	PDescribe("Get", func() {
+		PIt("should clone a plan to the plans direcotry", func() {
+		})
+	})
 })
 
 func MockPlanPath() {

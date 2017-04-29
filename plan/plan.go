@@ -109,6 +109,10 @@ resources:
 	return def
 }
 
+func Get(plan_url string) error {
+	return Clone(plan_url)
+}
+
 func planExists(plan_name string) bool {
 	plans_path := fmt.Sprintf("%s/.orbi/plans/", os.Getenv("HOME"))
 	files, _ := ioutil.ReadDir(plans_path)
