@@ -12,3 +12,7 @@ import:
   version: ^1.1.0
 - package: gopkg.in/src-d/go-git.v4
   version: ^4.0.0-rc9
+- package: golang.org/x/crypto
+  ref: 459e26527287adbc2adcc5d0d49abff9a5f315a7
+  subpackages:
+  - ssh
