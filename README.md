@@ -1,11 +1,36 @@
 ![orbi-project-generator](http://i.imgur.com/mtUfTaV.png)
 
-> Project structure generator
+> Project structure generator.
 
+Generate project structures using yaml and language agnostic templates.
+
+## Install
+> NOTE: orbi just works with unix-like operating systems, windows is not supported for now.
+
+### 1: Binary
+```shell
+curl -L "https://github.com/bronzdoc/orbi/releases/download/0.0.1/orbi-$(uname -s)-$(uname -m)" -o /usr/local/bin/orbi; chmod +x /usr/local/bin/orbi
+```
+
+### 2: `go get`
+If you have a GO environment you can simply:
+
+```shell
+$ go get github/bronzdoc/orbi
+```
+
+### 3: From source
+```
+$ git clone git@github.com:bronzdoc/orbi.git
+$ cd orbi/
+$ make build
+```
 
 ## Usage
 
-Orbi defines project structures using a `definition.yml` i.e:
+Orbi defines project structures using a `definition.yml`.
+
+e.g:
 
 ```yaml
 ---
@@ -51,8 +76,9 @@ my_plan
 
 You can notice a `templates` directory, your templates go there...
 
-Orbi uses the `GO` template system to template files, in order tu template a file all you need to do
-is create a file named the same as a file resource, i.e:
+In order tu template a file all you need to do is create a file named the same as a file resource.
+
+e.g:
 
 ```yaml
 context: .
@@ -77,7 +103,9 @@ $ orbi exec my_plan
 
 this command will generate the file structure defined in your plan definition.
 
-If your plan templates happen to have variables, you can pass arguments to those variables with the `--vars` flag, i.e
+If your plan templates happen to have variables, you can pass arguments to those variables with the `--vars` flag.
+
+e.g:
 
 in `.orbi/plans/tiesto/templates/file_a`
 
@@ -90,18 +118,6 @@ $ orbi exec my_plan --vars="name=Tarantino"
 ```
 
 that command will generate the file named `file_a` with content `Tarantino is awesome`
-
-## Install
-
-```shell
-curl -L "https://github.com/bronzdoc/orbi/releases/download/0.0.1/orbi-$(uname -s)-$(uname -m)" -o /usr/local/bin/orbi; chmod +x /usr/local/bin/orbi
-```
-
-If you have a GO environment you can simply:
-
-```shell
-$ go get github/bronzdoc/orbi
-```
 
 ## Contributing
 
