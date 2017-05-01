@@ -1,4 +1,7 @@
-# Orbi - project structure generator
+![orbi-project-generator](http://i.imgur.com/mtUfTaV.png)
+
+> Project structure generator
+
 
 ## Usage
 
