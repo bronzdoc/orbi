@@ -12,17 +12,7 @@ var cfgFile string
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   "orbi",
-	Short: `Generate a project structure based on a plan`,
-	Long: `
-
-     _
-   / o \  .-----------------------.
-   \   /  |      Bye from us!     |
-  -(\_/)- |          Chat soon.   |
-  \| x |/ '-----------------------'
-    \_/
-     ^
-	`,
+	Short: `Project structure generator`,
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
