@@ -4,29 +4,22 @@
 
 Generate project structures using yaml and language agnostic templates.
 
-## Install
+# Install
 > NOTE: orbi just works with unix-like operating systems, windows is not supported for now.
 
-### 1: Binary
-```shell
-curl -L "https://github.com/bronzdoc/orbi/releases/download/0.0.1/orbi-$(uname -s)-$(uname -m)" -o /usr/local/bin/orbi; chmod +x /usr/local/bin/orbi
-```
+### Binaries
 
-### 2: `go get`
-If you have a GO environment you can simply:
+- **linux** [386](https://github.com/bronzdoc/orbi/releases/download/v0.0.0/orbi-linux-386) / [amd64](https://github.com/bronzdoc/orbi/releases/download/v0.0.0/orbi-linux-amd64) / [arm](https://github.com/bronzdoc/orbi/releases/download/v0.0.0/orbi-linux-arm) / [arm64](https://github.com/bronzdoc/orbi/releases/download/v0.0.0/orbi-linux-arm64)
+- **darwin** [386](https://github.com/bronzdoc/orbi/releases/download/v0.0.0/orbi-darwin-386) / [amd64](https://github.com/bronzdoc/orbi/releases/download/v0.0.0/orbi-darwin-amd64)
+- **freebsd** [386](https://github.com/bronzdoc/orbi/releases/download/v0.0.0/orbi-freebsd-386) / [amd64](https://github.com/bronzdoc/orbi/releases/download/v0.0.0/orbi-freebsd-amd64)
+
+### Via Go
 
 ```shell
 $ go get github/bronzdoc/orbi
 ```
 
-### 3: From source
-```
-$ git clone git@github.com:bronzdoc/orbi.git
-$ cd orbi/
-$ make build
-```
-
-## Usage
+# Usage
 
 Orbi defines project structures using a `definition.yml`.
 
@@ -121,8 +114,4 @@ that command will generate the file named `file_a` with content `Tarantino is aw
 
 ## Contributing
 
-Contributions are greatly appreciated
-
-$ go get github.com/onsi/ginkgo/ginkgo
-$ go get github.com/onsi/gomega
-
+Contributions are greatly appreciated, and encouraged
