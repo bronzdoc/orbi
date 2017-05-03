@@ -7,6 +7,7 @@ import (
 	"os/exec"
 
 	"github.com/bronzdoc/orbi/definition"
+	"github.com/spf13/viper"
 )
 
 // Have higher control of exec.Command,
@@ -24,8 +25,7 @@ func New(definition *definition.Definition) *Plan {
 }
 
 func PlanFactory(plan_name string, options map[string]interface{}) *Plan {
-	// TODO this should be in a config object
-	definition_path := fmt.Sprintf("%s/.orbi/plans/%s/definition.yml", os.Getenv("HOME"), plan_name)
+	definition_path := fmt.Sprintf("%s/%s/definition.yml", viper.GetString("PlansPath"), plan_name)
 	definition := definition.New(definition_path, options)
 	return New(definition)
 }
@@ -35,7 +35,7 @@ func (p *Plan) Execute() {
 }
 
 func List() (list []string) {
-	plans_path := fmt.Sprintf("%s/.orbi/plans/", os.Getenv("HOME"))
+	plans_path := viper.GetString("PlansPath")
 	files, _ := ioutil.ReadDir(plans_path)
 	for _, f := range files {
 		list = append(list, f.Name())
@@ -53,7 +53,7 @@ func Edit(plan_name string) error {
 		return fmt.Errorf(`$EDITOR is empty, could not edit "%s" plan.`, plan_name)
 	}
 
-	definition_path := fmt.Sprintf("%s/.orbi/plans/%s/definition.yml", os.Getenv("HOME"), plan_name)
+	definition_path := fmt.Sprintf("%s/%s/definition.yml", viper.GetString("PlansPath"), plan_name)
 	cmd := ExecCommand(editor, definition_path)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
@@ -88,7 +88,7 @@ func PlanDefinition(plan_name string, options map[string]interface{}) *definitio
 	}
 
 	map_definition := map[interface{}]interface{}{
-		"context":   fmt.Sprintf("%s/.orbi/plans/", os.Getenv("HOME")),
+		"context":   viper.GetString("PlansPath"),
 		"resources": resources,
 	}
 
@@ -114,7 +114,7 @@ func Get(plan_url string) error {
 }
 
 func planExists(plan_name string) bool {
-	plans_path := fmt.Sprintf("%s/.orbi/plans/", os.Getenv("HOME"))
+	plans_path := viper.GetString("PlansPath")
 	files, _ := ioutil.ReadDir(plans_path)
 	for _, f := range files {
 		if f.Name() == plan_name {

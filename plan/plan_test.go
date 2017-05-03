@@ -1,11 +1,13 @@
 package plan_test
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 
 	"github.com/bronzdoc/orbi/definition"
 	. "github.com/bronzdoc/orbi/plan"
+	"github.com/spf13/viper"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -15,6 +17,7 @@ var _ = Describe("Plan", func() {
 	var plan *Plan
 
 	BeforeEach(func() {
+		MockPlanPath()
 		resources := []map[interface{}]interface{}{
 			{
 				"dir": map[interface{}]interface{}{
@@ -60,7 +63,6 @@ var _ = Describe("Plan", func() {
 
 	Describe("List", func() {
 		It("should get a list of all the plans", func() {
-			MockPlanPath()
 			plan_list := List()
 
 			Expect(plan_list).To(Equal([]string{
@@ -72,7 +74,6 @@ var _ = Describe("Plan", func() {
 	})
 
 	Describe("Edit", func() {
-		MockPlanPath()
 		Context("When plan doesn't exists", func() {
 			It("should return the correct error message", func() {
 				err := Edit("plan_z")
@@ -103,7 +104,6 @@ var _ = Describe("Plan", func() {
 
 	Describe("PlanDefinition", func() {
 		It("should return a definition for a new plan", func() {
-			MockPlanPath()
 			var options map[string]interface{}
 			pd := PlanDefinition("plan_x", options)
 			resource := pd.Search("plan_x/definition.yml")
@@ -133,7 +133,10 @@ func MockPlanPath() {
 	os.Create("./tmp/.orbi/plans/plan_a/definition.yml")
 	os.Create("./tmp/.orbi/plans/plan_b")
 	os.Create("./tmp/.orbi/plans/plan_c")
-	os.Setenv("HOME", "./tmp")
+
+	viper.Set("OrbiPath", "./tmp/.orbi")
+	viper.Set("PlansPath", fmt.Sprintf("%s/plans", viper.GetString("OrbiPath")))
+	viper.Set("TemplatesDir", "templates")
 }
 
 // See https://npf.io/2015/06/testing-exec-command/
