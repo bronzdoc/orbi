@@ -4,6 +4,8 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+
+	"github.com/spf13/viper"
 )
 
 type Resource interface {
@@ -67,7 +69,7 @@ func (f *File) Create(options map[string]interface{}) {
 
 	// TODO improve how a definition.template and a definition.File interacts
 	if f.isContentEmpty() {
-		templates_path := options["templates_path"].(string)
+		templates_path := viper.GetString("TemplatesPath")
 
 		// Check if there is a template for the file
 		if f.hasTemplate(templates_path) {
