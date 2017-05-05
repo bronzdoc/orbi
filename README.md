@@ -1,4 +1,5 @@
 ![orbi](https://github.com/bronzdoc/orbi/blob/master/logo.png)
+[![Build Status](https://travis-ci.org/bronzdoc/orbi.svg?branch=master)](https://travis-ci.org/bronzdoc/orbi)
 
 > Project structure generator.
 
