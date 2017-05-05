@@ -1,0 +1,50 @@
+---
+  language: go
+  sudo: false
+  notifications:
+    email: true
+  go:
+    - 1.7
+    - tip
+  install:
+    - go get github.com/golang/lint/golint
+  script:
+    - go build -v
+    - go vet $(go list ./... | grep -v vendor)
+    - test -z "$(golint ./... | grep -v vendor | tee /dev/stderr)"
+    - test -z "$(gofmt -s -l . | grep -v vendor | tee /dev/stderr)"
+    - go test $(go list ./... | grep -v vendor)
+    - make release
+  deploy:
+    provider: releases
+    api_key:
+      secure: ""
+    go: 1.7
+    file:
+      - cross/orbi-darwin-386
+      - cross/orbi-darwin-386.md5
+      - cross/orbi-darwin-386.sha256
+      - cross/orbi-darwin-amd64
+      - cross/orbi-darwin-amd64.md5
+      - cross/orbi-darwin-amd64.sha256
+      - cross/orbi-freebsd-386
+      - cross/orbi-freebsd-386.md5
+      - cross/orbi-freebsd-386.sha256
+      - cross/orbi-freebsd-amd64
+      - cross/orbi-freebsd-amd64.md5
+      - cross/orbi-freebsd-amd64.sha256
+      - cross/orbi-linux-386
+      - cross/orbi-linux-386.md5
+      - cross/orbi-linux-386.sha256
+      - cross/orbi-linux-amd64
+      - cross/orbi-linux-amd64.md5
+      - cross/orbi-linux-amd64.sha256
+      - cross/orbi-linux-arm
+      - cross/orbi-linux-arm64
+      - cross/orbi-linux-arm64.md5
+      - cross/orbi-linux-arm64.sha256
+      - cross/orbi-linux-arm.md5
+      - cross/orbi-linux-arm.sha256
+    skip_cleanup: true
+    on:
+      tags: true
