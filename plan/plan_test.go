@@ -37,9 +37,7 @@ var _ = Describe("Plan", func() {
 			"resources": resources,
 		}
 
-		options := map[string]interface{}{
-			"templates_path": "./tmp/templates_path",
-		}
+		options := map[string]interface{}{}
 
 		definition := definition.New(map_definition, options)
 		plan = New(definition)
@@ -99,7 +97,6 @@ var _ = Describe("Plan", func() {
 				Expect(err).To(BeNil())
 			})
 		})
-
 	})
 
 	Describe("PlanDefinition", func() {
@@ -136,7 +133,6 @@ func MockPlanPath() {
 
 	viper.Set("OrbiPath", "./tmp/.orbi")
 	viper.Set("PlansPath", fmt.Sprintf("%s/plans", viper.GetString("OrbiPath")))
-	viper.Set("TemplatesDir", "templates")
 }
 
 // See https://npf.io/2015/06/testing-exec-command/
