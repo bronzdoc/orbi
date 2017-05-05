@@ -3,10 +3,10 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/bronzdoc/orbi/plan"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var newCmd = &cobra.Command{
@@ -22,11 +22,12 @@ var newCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		options := map[string]interface{}{
-			"templates_path": fmt.Sprintf(
-				"%s/.orbi/plans/%s/templates", os.Getenv("HOME"), plan_name,
-			),
-		}
+		// Dinamically plan templates path
+		viper.Set("TemplatesPath", fmt.Sprintf(
+			"%s/%s/%s", viper.GetString("PlansPath"), viper.GetString("TemplatesDir"), plan_name,
+		))
+
+		options := map[string]interface{}{}
 
 		definition := plan.PlanDefinition(plan_name, options)
 		plan.New(definition).Execute()

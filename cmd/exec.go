@@ -30,7 +30,7 @@ var execCmd = &cobra.Command{
 
 		// Dinamically plan templates path
 		viper.Set("TemplatesPath", fmt.Sprintf(
-			"%s/%s/%s", viper.GetString("PlansPath"), viper.GetString("TemplateDir"), plan_name,
+			"%s/%s/%s", viper.GetString("PlansPath"), plan_name, viper.GetString("TemplatesDir"),
 		))
 
 		options := map[string]interface{}{
