@@ -1,4 +1,4 @@
-![orbi-project-generator](http://i.imgur.com/mtUfTaV.png)
+![orbi](https://github.com/bronzdoc/orbi/blob/master/logo.png)
 
 > Project structure generator.
 
