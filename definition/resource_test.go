@@ -88,18 +88,11 @@ var _ = Describe("Resource", func() {
 			It("should create a file", func() {
 				file.Create(map[string]interface{}{})
 
-				file_exists, err := exists(file.Id())
-				if err != nil {
-					// Todo  change to Fail(err)
-					log.Fatal(err)
-				}
+				file_exists, _ := exists(file.Id())
 
 				Expect(file_exists).To(Equal(true))
 
-				content, err := ioutil.ReadFile("./test-resource/tmp-file")
-				if err != nil {
-					log.Fatal(err)
-				}
+				content, _ := ioutil.ReadFile("./test-resource/tmp-file")
 
 				Expect(content).To(Equal([]byte("Oooh, that's a bingo!")))
 			})
