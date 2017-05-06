@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
 
 	"github.com/bronzdoc/orbi/plan"
 	"github.com/bronzdoc/orbi/vars"
@@ -10,7 +12,8 @@ import (
 	"github.com/spf13/viper"
 )
 
-var varsFlag string
+var templateVars string
+var templateVarsPath string
 
 var execCmd = &cobra.Command{
 	Use:   "exec PLAN",
@@ -21,16 +24,28 @@ var execCmd = &cobra.Command{
 		if len(args) > 0 {
 			planName = args[0]
 		} else {
-			err := fmt.Errorf("orbi exec expects a plan name, see orbi exec --help")
-			log.Fatal(err)
+			log.Fatal("orbi exec expects a plan name, see orbi exec --help")
 		}
 
-		vars, err := vars.Parse(varsFlag)
+		if templateVarsPath != "" {
+			if varsPathExists(templateVarsPath) {
+				fileContent, err := ioutil.ReadFile(templateVarsPath)
+				if err != nil {
+					log.Fatalf("vars-file: ", err)
+				}
+
+				templateVars = string(fileContent)
+			} else {
+				log.Fatalf("vars-file: couldn't find %s", templateVarsPath)
+			}
+		}
+
+		vars, err := vars.Parse(templateVars)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		// Dinamically plan templates path
+		// Dinamically build plan templates path
 		viper.Set("TemplatesPath", fmt.Sprintf(
 			"%s/%s/%s", viper.GetString("PlansPath"), planName, viper.GetString("TemplatesDir"),
 		))
@@ -49,5 +64,11 @@ var execCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(execCmd)
-	execCmd.Flags().StringVarP(&varsFlag, "vars", "", "", "template vars KEY=VALUE")
+	execCmd.Flags().StringVarP(&templateVars, "vars", "v", "", "template vars KEY=VALUE")
+	execCmd.Flags().StringVarP(&templateVarsPath, "vars-file", "", "", "template vars file path containing KEY=VALUE")
+}
+
+func varsPathExists(varsPath string) bool {
+	_, err := os.Stat(varsPath)
+	return err == nil
 }
