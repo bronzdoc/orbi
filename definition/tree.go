@@ -37,14 +37,14 @@ func traverse(r Resource, action func(r Resource)) {
 }
 
 // Generates a definition Resource hierarchy
-func generate(resourceId string, definitionResources []map[interface{}]interface{}) []Resource {
+func generate(resourceID string, definitionResources []map[interface{}]interface{}) []Resource {
 	var resources []Resource
 	for _, resource := range definitionResources {
 		for key, value := range resource {
 			if key == "dir" {
 				data := value.(map[interface{}]interface{})
 				name := data["name"].(string)
-				id := resourceId + "/" + name
+				id := resourceID + "/" + name
 
 				dirResources := []map[interface{}]interface{}{
 					data,
@@ -58,7 +58,7 @@ func generate(resourceId string, definitionResources []map[interface{}]interface
 
 			} else if key == "files" {
 				data := value.([]interface{})
-				files := getFileResources(resourceId, filesStringify(data))
+				files := getFileResources(resourceID, filesStringify(data))
 				resources = append(resources, files...)
 			}
 		}
@@ -67,10 +67,10 @@ func generate(resourceId string, definitionResources []map[interface{}]interface
 }
 
 // Convert a []string to []Resource
-func getFileResources(resourceId string, fileNames []string) []Resource {
+func getFileResources(resourceID string, fileNames []string) []Resource {
 	var resources []Resource
 	for _, file := range fileNames {
-		id := resourceId + "/" + file
+		id := resourceID + "/" + file
 		resources = append(resources, &File{
 			name: file,
 			id:   id,

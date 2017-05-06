@@ -39,7 +39,7 @@ var execCmd = &cobra.Command{
 			"vars": vars,
 		}
 
-		plan := plan.PlanFactory(planName, options)
+		plan := plan.Factory(planName, options)
 
 		if err := plan.Execute(); err != nil {
 			log.Fatal(err)

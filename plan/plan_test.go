@@ -101,10 +101,10 @@ var _ = Describe("Plan", func() {
 		})
 	})
 
-	Describe("PlanDefinition", func() {
+	Describe("Definition", func() {
 		It("should return a definition for a new plan", func() {
 			var options map[string]interface{}
-			pd := PlanDefinition("plan_x", options)
+			pd := Definition("plan_x", options)
 			resource := pd.Search("plan_x/definition.yml")
 			content := resource.(*definition.File).Content()
 

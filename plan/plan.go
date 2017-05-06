@@ -26,8 +26,8 @@ func New(definition *definition.Definition) *Plan {
 	}
 }
 
-// PlanFactory constructs a Plan with a default Definition struct
-func PlanFactory(planName string, options map[string]interface{}) *Plan {
+// Factory constructs a Plan with a default Definition struct
+func Factory(planName string, options map[string]interface{}) *Plan {
 	definitionPath := fmt.Sprintf("%s/%s/definition.yml", viper.GetString("PlansPath"), planName)
 	definition := definition.New(definitionPath, options)
 	return New(definition)
@@ -76,8 +76,8 @@ func Edit(planName string) error {
 	return nil
 }
 
-// PlanDefinition gets a definition struct for a new plan
-func PlanDefinition(planName string, options map[string]interface{}) *definition.Definition {
+// Definition gets a definition struct for a new plan
+func Definition(planName string, options map[string]interface{}) *definition.Definition {
 	// Default structure for a new plan
 	resources := []map[interface{}]interface{}{
 		{
@@ -116,8 +116,8 @@ resources:
 }
 
 // Get downloads a plan from a plan repo url
-func Get(planUrl string) error {
-	return Clone(planUrl)
+func Get(planURL string) error {
+	return Clone(planURL)
 }
 
 func planExists(planName string) bool {

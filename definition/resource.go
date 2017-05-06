@@ -13,7 +13,7 @@ type Resource interface {
 	Create(map[string]interface{}) error
 	Name() string
 	Children() []Resource
-	Id() string
+	ID() string
 }
 
 // Directory resource
@@ -48,8 +48,8 @@ func (d *Directory) Children() []Resource {
 	return d.children
 }
 
-// Id gets a Directory resource Id
-func (d *Directory) Id() string {
+// ID gets a Directory resource id
+func (d *Directory) ID() string {
 	return d.id
 }
 
@@ -125,8 +125,8 @@ func (f *File) Children() []Resource {
 	return nil
 }
 
-// Id gets a File resource id
-func (f *File) Id() string {
+// ID gets a File resource id
+func (f *File) ID() string {
 	return f.id
 }
 

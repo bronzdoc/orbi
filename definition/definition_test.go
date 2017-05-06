@@ -72,7 +72,7 @@ resources:
 			Expect(err).To(BeNil())
 
 			definition.ResourceTree.Traverse(func(r Resource) {
-				file_exists, _ := exists(r.Id())
+				file_exists, _ := exists(r.ID())
 				Expect(file_exists).To(Equal(true))
 			})
 		})

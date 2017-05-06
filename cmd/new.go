@@ -29,7 +29,7 @@ var newCmd = &cobra.Command{
 
 		options := map[string]interface{}{}
 
-		definition := plan.PlanDefinition(planName, options)
+		definition := plan.Definition(planName, options)
 		plan.New(definition).Execute()
 	},
 }

@@ -34,16 +34,16 @@ var _ = Describe("Resource", func() {
 			})
 		})
 
-		Describe("#Id", func() {
+		Describe("#ID", func() {
 			It("should return the correct id", func() {
-				Expect(directory.Id()).To(Equal("./test-resource/tmp"))
+				Expect(directory.ID()).To(Equal("./test-resource/tmp"))
 			})
 		})
 
 		Describe("#Create", func() {
 			It("should create a directory", func() {
 				directory.Create(map[string]interface{}{})
-				dir_exists, err := exists(directory.Id())
+				dir_exists, err := exists(directory.ID())
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -56,7 +56,7 @@ var _ = Describe("Resource", func() {
 				children := directory.Children()
 				Expect(len(children)).To(Equal(1))
 				Expect(children[0].Name()).To(Equal("tmp-child"))
-				Expect(children[0].Id()).To(Equal("./test-resource/tmp-child"))
+				Expect(children[0].ID()).To(Equal("./test-resource/tmp-child"))
 			})
 		})
 	})
@@ -78,9 +78,9 @@ var _ = Describe("Resource", func() {
 			})
 		})
 
-		Describe("#Id", func() {
+		Describe("#ID", func() {
 			It("should return the correct id", func() {
-				Expect(file.Id()).To(Equal("./test-resource/tmp-file"))
+				Expect(file.ID()).To(Equal("./test-resource/tmp-file"))
 			})
 		})
 
@@ -89,7 +89,7 @@ var _ = Describe("Resource", func() {
 				err := file.Create(map[string]interface{}{})
 				Expect(err).To(BeNil())
 
-				file_exists, _ := exists(file.Id())
+				file_exists, _ := exists(file.ID())
 
 				Expect(file_exists).To(Equal(true))
 

@@ -41,7 +41,7 @@ func (d *Definition) Create() error {
 	tree := d.ResourceTree
 
 	// Check definition context exists
-	if _, err := os.Stat(tree.Root().Id()); err != nil {
+	if _, err := os.Stat(tree.Root().ID()); err != nil {
 		return fmt.Errorf(
 			`Definition Create: Expected context: "%s" to exist.`,
 			tree.Root().Name(),
@@ -78,7 +78,7 @@ func (d *Definition) Search(pattern string) Resource {
 
 	for resourceWanted := range resource {
 		pattern := fmt.Sprint(d.Context, "/", pattern)
-		if resourceWanted.Id() == pattern {
+		if resourceWanted.ID() == pattern {
 			return resourceWanted
 		}
 	}
