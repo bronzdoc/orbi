@@ -1,15 +1,15 @@
 package definition
 
 import (
+	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 
 	"github.com/spf13/viper"
 )
 
 type Resource interface {
-	Create(map[string]interface{})
+	Create(map[string]interface{}) error
 	Name() string
 	Children() []Resource
 	Id() string
@@ -29,8 +29,9 @@ func NewDirectory(name, id string, children []Resource) *Directory {
 	}
 }
 
-func (d *Directory) Create(options map[string]interface{}) {
+func (d *Directory) Create(options map[string]interface{}) error {
 	os.Mkdir(d.id, 0776)
+	return nil
 }
 
 func (d *Directory) Name() string {
@@ -59,11 +60,11 @@ func NewFile(name, id string, content []byte) *File {
 	}
 }
 
-func (f *File) Create(options map[string]interface{}) {
+func (f *File) Create(options map[string]interface{}) error {
 	file, err := os.Create(f.id)
 
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("File Create: ", err)
 	}
 	defer file.Close()
 
@@ -78,18 +79,20 @@ func (f *File) Create(options map[string]interface{}) {
 
 			content, err := ioutil.ReadFile(path)
 			if err != nil {
-				log.Fatal(err)
+				return fmt.Errorf("File Create: ", err)
 			}
 
 			_, err = NewTemplate(f.name, content, vars).Execute(file)
 			if err != nil {
-				log.Fatal(err)
+				return fmt.Errorf("File Create: ", err)
 			}
 		}
 	} else {
 		var vars map[string]string
 		NewTemplate(f.name, f.content, vars).Execute(file)
 	}
+
+	return nil
 }
 
 func (f *File) Content() []byte {

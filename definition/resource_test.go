@@ -86,7 +86,8 @@ var _ = Describe("Resource", func() {
 
 		Describe("#Create", func() {
 			It("should create a file", func() {
-				file.Create(map[string]interface{}{})
+				err := file.Create(map[string]interface{}{})
+				Expect(err).To(BeNil())
 
 				file_exists, _ := exists(file.Id())
 
