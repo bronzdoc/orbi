@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 
 	"gopkg.in/yaml.v2"
 )
@@ -32,11 +33,32 @@ func New(definition_format interface{}, options map[string]interface{}) *Definit
 	return def
 }
 
-func (d *Definition) Create() {
+func (d *Definition) Create() error {
+	errChan := make(chan error)
 	tree := d.ResourceTree
-	tree.Traverse(func(r Resource) {
-		r.Create(d.Options)
-	})
+
+	// Check definition context exists
+	if _, err := os.Stat(tree.Root().Id()); err != nil {
+		return fmt.Errorf(
+			"Definition Create: Expected context:%s to exist",
+			tree.Root().Name(),
+		)
+	}
+
+	go func() {
+		defer close(errChan)
+		tree.Traverse(func(r Resource) {
+			errChan <- r.Create(d.Options)
+		})
+	}()
+
+	for err := range errChan {
+		if err != nil {
+			return fmt.Errorf("Definition Create: ", err)
+		}
+	}
+
+	return nil
 }
 
 func (d *Definition) Search(pattern string) Resource {

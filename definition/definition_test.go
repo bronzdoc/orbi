@@ -13,9 +13,10 @@ import (
 
 var _ = Describe("Definition", func() {
 	var definition *Definition
+	var resources []map[interface{}]interface{}
 
 	BeforeEach(func() {
-		resources := []map[interface{}]interface{}{
+		resources = []map[interface{}]interface{}{
 			{
 				"dir": map[interface{}]interface{}{
 					"name": "tmp-dir",
@@ -34,9 +35,7 @@ var _ = Describe("Definition", func() {
 			"resources": resources,
 		}
 
-		options := map[string]interface{}{
-			"templates_path": "./tmp/templates_path",
-		}
+		options := map[string]interface{}{}
 
 		definition = New(map_definition, options)
 	})
@@ -69,11 +68,30 @@ resources:
 
 	Describe("#Create", func() {
 		It("should create the defined resources", func() {
-			definition.Create()
+			err := definition.Create()
+			Expect(err).To(BeNil())
+
 			definition.ResourceTree.Traverse(func(r Resource) {
 				file_exists, _ := exists(r.Id())
 				Expect(file_exists).To(Equal(true))
 			})
+		})
+
+		Context("Definition context doesn't exists", func() {
+			It("should return error", func() {
+				map_definition := map[interface{}]interface{}{
+					"context":   "./bad-context",
+					"resources": resources,
+				}
+
+				options := map[string]interface{}{}
+
+				definition = New(map_definition, options)
+
+				err := definition.Create()
+				Expect(err).ToNot(BeNil())
+			})
+
 		})
 	})
 
