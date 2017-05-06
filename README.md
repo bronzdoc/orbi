@@ -111,7 +111,23 @@ in `.orbi/plans/tiesto/templates/file_a`
 $ orbi exec my_plan --vars="name=Tarantino"
 ```
 
-that command will generate the file named `file_a` with content `Tarantino is awesome`
+that command will generate the file named `file_a` with content `Tarantino is awesome`.
+
+
+### Sharing plans
+orbi let you dowload a plan from a repository with the `orbi plan get` command
+
+e.g:
+
+**ssh:**
+```shell
+$ orbi plan get my_plan git@github.com:user/plan_name.git
+```
+
+**https:**
+```shell
+$ orbi plan get my_plan https://user@github.com/user/plan_name.git
+```
 
 ## Contributing
 
