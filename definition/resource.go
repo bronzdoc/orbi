@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Resource represent a resource common actions
 type Resource interface {
 	Create(map[string]interface{}) error
 	Name() string
@@ -15,12 +16,14 @@ type Resource interface {
 	Id() string
 }
 
+// Directory resource
 type Directory struct {
 	name     string
 	id       string
 	children []Resource
 }
 
+// NewDirectory creates a new Directory resource
 func NewDirectory(name, id string, children []Resource) *Directory {
 	return &Directory{
 		name:     name,
@@ -29,29 +32,35 @@ func NewDirectory(name, id string, children []Resource) *Directory {
 	}
 }
 
+// Create creates a new Directory resource in file system
 func (d *Directory) Create(options map[string]interface{}) error {
 	os.Mkdir(d.id, 0776)
 	return nil
 }
 
+// Name gets a Directory resource name
 func (d *Directory) Name() string {
 	return d.name
 }
 
+// Children gets a Diretory resource children
 func (d *Directory) Children() []Resource {
 	return d.children
 }
 
+// Id gets a Directory resource Id
 func (d *Directory) Id() string {
 	return d.id
 }
 
+// File resource
 type File struct {
 	name    string
 	id      string
 	content []byte
 }
 
+// NewFile creates a new File resource
 func NewFile(name, id string, content []byte) *File {
 	return &File{
 		name:    name,
@@ -60,6 +69,7 @@ func NewFile(name, id string, content []byte) *File {
 	}
 }
 
+// Create creates a new File resource in file system
 func (f *File) Create(options map[string]interface{}) error {
 	file, err := os.Create(f.id)
 
@@ -95,12 +105,29 @@ func (f *File) Create(options map[string]interface{}) error {
 	return nil
 }
 
+// Content gets a File resource content
 func (f *File) Content() []byte {
 	return f.content
 }
 
+// SetContent sets a file resource content
 func (f *File) SetContent(content []byte) {
 	f.content = content
+}
+
+// Name gets a File resource name
+func (f *File) Name() string {
+	return f.name
+}
+
+// Children gets a File resource children
+func (f *File) Children() []Resource {
+	return nil
+}
+
+// Id gets a File resource id
+func (f *File) Id() string {
+	return f.id
 }
 
 func (f *File) isContentEmpty() bool {
@@ -110,16 +137,4 @@ func (f *File) isContentEmpty() bool {
 func (f *File) hasTemplate(templatesPath string) bool {
 	_, err := os.Stat(templatesPath + "/" + f.name)
 	return err == nil
-}
-
-func (f *File) Name() string {
-	return f.name
-}
-
-func (f *File) Children() []Resource {
-	return nil
-}
-
-func (f *File) Id() string {
-	return f.id
 }

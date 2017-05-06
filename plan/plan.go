@@ -10,30 +10,35 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Have higher control of exec.Command,
-// this will allow us to mock it easier in tests...
+// ExecCommand allows to Have higher control of exec.Command,
+// and will allow us to mock it easier in tests...
 var ExecCommand = exec.Command
 
+// Plan represents a plan to execute
 type Plan struct {
 	definition *definition.Definition
 }
 
+// New creates a new Plan
 func New(definition *definition.Definition) *Plan {
 	return &Plan{
 		definition: definition,
 	}
 }
 
+// PlanFactory constructs a Plan with a default Definition struct
 func PlanFactory(planName string, options map[string]interface{}) *Plan {
 	definitionPath := fmt.Sprintf("%s/%s/definition.yml", viper.GetString("PlansPath"), planName)
 	definition := definition.New(definitionPath, options)
 	return New(definition)
 }
 
+// Execute generates a project definnition in file system
 func (p *Plan) Execute() error {
 	return p.definition.Create()
 }
 
+// List gets all the plans in the plans path
 func List() (list []string) {
 	plansPath := viper.GetString("PlansPath")
 	files, _ := ioutil.ReadDir(plansPath)
@@ -43,14 +48,15 @@ func List() (list []string) {
 	return list
 }
 
+// Edit allows to edit a plan definition
 func Edit(planName string) error {
 	if !planExists(planName) {
-		return fmt.Errorf(`plan "%s" doesn't exists.`, planName)
+		return fmt.Errorf(`plan "%s" doesn't exists`, planName)
 	}
 
 	editor := os.Getenv("EDITOR")
 	if editor == "" {
-		return fmt.Errorf(`$EDITOR is empty, could not edit "%s" plan.`, planName)
+		return fmt.Errorf(`$EDITOR is empty, could not edit "%s" plan`, planName)
 	}
 
 	definitionPath := fmt.Sprintf("%s/%s/definition.yml", viper.GetString("PlansPath"), planName)
@@ -70,7 +76,7 @@ func Edit(planName string) error {
 	return nil
 }
 
-// Get a definition object for a new plan
+// PlanDefinition gets a definition struct for a new plan
 func PlanDefinition(planName string, options map[string]interface{}) *definition.Definition {
 	// Default structure for a new plan
 	resources := []map[interface{}]interface{}{
@@ -109,6 +115,7 @@ resources:
 	return def
 }
 
+// Get downloads a plan from a plan repo url
 func Get(planUrl string) error {
 	return Clone(planUrl)
 }

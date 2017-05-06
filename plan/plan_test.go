@@ -77,7 +77,7 @@ var _ = Describe("Plan", func() {
 		Context("When plan doesn't exists", func() {
 			It("should return the correct error message", func() {
 				err := Edit("plan_z")
-				Expect(err.Error()).To(Equal(`plan "plan_z" doesn't exists.`))
+				Expect(err.Error()).To(Equal(`plan "plan_z" doesn't exists`))
 			})
 		})
 
@@ -85,7 +85,7 @@ var _ = Describe("Plan", func() {
 			It("should return the correct error message", func() {
 				os.Setenv("EDITOR", "")
 				err := Edit("plan_a")
-				Expect(err.Error()).To(Equal(`$EDITOR is empty, could not edit "plan_a" plan.`))
+				Expect(err.Error()).To(Equal(`$EDITOR is empty, could not edit "plan_a" plan`))
 			})
 		})
 

@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// Parse parses a string to look for vars
 func Parse(str string) (map[string]string, error) {
 	data := make(map[string]string)
 	regex, err := regexp.Compile(`\s?[a-zA-Z]+\s?=\s?\w+`)

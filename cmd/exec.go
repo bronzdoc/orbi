@@ -10,6 +10,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+var varsFlag string
+
 var execCmd = &cobra.Command{
 	Use:   "exec PLAN",
 	Short: "Executes a plan",
@@ -23,7 +25,7 @@ var execCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		vars, err := vars.Parse(Vars)
+		vars, err := vars.Parse(varsFlag)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -45,9 +47,7 @@ var execCmd = &cobra.Command{
 	},
 }
 
-var Vars string
-
 func init() {
 	RootCmd.AddCommand(execCmd)
-	execCmd.Flags().StringVarP(&Vars, "vars", "", "", "template vars KEY=VALUE")
+	execCmd.Flags().StringVarP(&varsFlag, "vars", "", "", "template vars KEY=VALUE")
 }

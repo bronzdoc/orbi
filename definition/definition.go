@@ -9,6 +9,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// Definition represents a defined project srtucture
 type Definition struct {
 	Context      string
 	Resources    []map[interface{}]interface{}
@@ -16,6 +17,7 @@ type Definition struct {
 	Options      map[string]interface{}
 }
 
+// New creates a new Definiton
 func New(definitionFormat interface{}, options map[string]interface{}) *Definition {
 	var def *Definition
 
@@ -33,6 +35,7 @@ func New(definitionFormat interface{}, options map[string]interface{}) *Definiti
 	return def
 }
 
+// Create creates a defined project structure in file system
 func (d *Definition) Create() error {
 	errChan := make(chan error)
 	tree := d.ResourceTree
@@ -61,6 +64,7 @@ func (d *Definition) Create() error {
 	return nil
 }
 
+// Search search for a Resource in a Definition struct
 func (d *Definition) Search(pattern string) Resource {
 	resource := make(chan Resource)
 	tree := d.ResourceTree

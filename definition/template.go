@@ -8,12 +8,14 @@ import (
 	"text/template"
 )
 
+// Template represents a file template
 type Template struct {
 	name    string
 	content []byte
 	vars    map[string]string
 }
 
+// NewTemplate creates a new Template
 func NewTemplate(name string, content []byte, vars map[string]string) *Template {
 	return &Template{
 		name:    name,
@@ -22,6 +24,7 @@ func NewTemplate(name string, content []byte, vars map[string]string) *Template 
 	}
 }
 
+// Execute applies a parsed template to a specified io.Writer
 func (t *Template) Execute(w io.Writer) (*Template, error) {
 	if err := t.validateVars(); err != nil {
 		return t, fmt.Errorf("validateVars: %s", err)
@@ -42,14 +45,17 @@ func (t *Template) Execute(w io.Writer) (*Template, error) {
 	return t, nil
 }
 
+// Name gets a Template name
 func (t *Template) Name() string {
 	return t.name
 }
 
+// Content gets a Template content
 func (t *Template) Content() []byte {
 	return t.content
 }
 
+// Vars gets a Template variables
 func (t *Template) Vars() map[string]string {
 	return t.vars
 }

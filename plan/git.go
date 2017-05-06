@@ -12,6 +12,7 @@ import (
 	gitssh "gopkg.in/src-d/go-git.v4/plumbing/transport/ssh"
 )
 
+// Clone clones a plan repository to the plans path
 func Clone(repoURL string) error {
 	reg, err := regexp.Compile(`(.*/)|(\.git)`)
 	if err != nil {

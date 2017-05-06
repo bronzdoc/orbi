@@ -1,10 +1,11 @@
 package definition
 
+// Tree represents a definition tree structure
 type Tree struct {
 	root Resource
 }
 
-// Creates a definition tree structure
+// NewTree Creates a new Tree
 func NewTree(context string, definitionResources []map[interface{}]interface{}) *Tree {
 	resource := &Directory{
 		name:     context,
@@ -14,16 +15,16 @@ func NewTree(context string, definitionResources []map[interface{}]interface{}) 
 	return &Tree{root: resource}
 }
 
+// Root gets a Tree root
 func (t *Tree) Root() Resource {
 	return t.root
 }
 
-// Traverse the tree and yield each node to a function
+// Traverse a tree and yield each node to a function
 func (t *Tree) Traverse(action func(r Resource)) {
 	traverse(t.root, action)
 }
 
-// Traverse the tree and yield each resource to a function
 func traverse(r Resource, action func(r Resource)) {
 	if r.Children() == nil {
 		return
