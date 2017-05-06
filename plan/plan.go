@@ -30,8 +30,8 @@ func PlanFactory(plan_name string, options map[string]interface{}) *Plan {
 	return New(definition)
 }
 
-func (p *Plan) Execute() {
-	p.definition.Create()
+func (p *Plan) Execute() error {
+	return p.definition.Create()
 }
 
 func List() (list []string) {

@@ -45,7 +45,9 @@ var _ = Describe("Plan", func() {
 
 	Describe("#Execute", func() {
 		It("should execute the plan", func() {
-			plan.Execute()
+			err := plan.Execute()
+			Expect(err).To(BeNil())
+
 			resources := []string{
 				"./test-resource/tmp-dir",
 				"./test-resource/tmp-dir/tmp-dir-child",
