@@ -16,16 +16,16 @@ type Definition struct {
 	Options      map[string]interface{}
 }
 
-func New(definition_format interface{}, options map[string]interface{}) *Definition {
+func New(definitionFormat interface{}, options map[string]interface{}) *Definition {
 	var def *Definition
 
-	switch df_type := definition_format.(type) {
+	switch ftype := definitionFormat.(type) {
 	default:
-		log.Fatalf("%s: Is an invalid format type to create a definition", df_type)
+		log.Fatalf("%s: Is an invalid format type to create a definition", ftype)
 	case string:
-		def = newFromFile(definition_format.(string), options)
+		def = newFromFile(definitionFormat.(string), options)
 	case map[interface{}]interface{}:
-		def = newFromMap(definition_format.(map[interface{}]interface{}), options)
+		def = newFromMap(definitionFormat.(map[interface{}]interface{}), options)
 	}
 
 	def.ResourceTree = NewTree(def.Context, def.Resources)
@@ -72,35 +72,35 @@ func (d *Definition) Search(pattern string) Resource {
 		})
 	}()
 
-	for resource_wanted := range resource {
+	for resourceWanted := range resource {
 		pattern := fmt.Sprint(d.Context, "/", pattern)
-		if resource_wanted.Id() == pattern {
-			return resource_wanted
+		if resourceWanted.Id() == pattern {
+			return resourceWanted
 		}
 	}
 
 	return nil
 }
 
-func newFromFile(file_name string, options map[string]interface{}) *Definition {
+func newFromFile(fileName string, options map[string]interface{}) *Definition {
 	def := Definition{Options: options}
 
-	definition_content, err := ioutil.ReadFile(file_name)
+	definitionContent, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if err = yaml.Unmarshal(definition_content, &def); err != nil {
+	if err = yaml.Unmarshal(definitionContent, &def); err != nil {
 		log.Fatal(err)
 	}
 
 	return &def
 }
 
-func newFromMap(map_definition map[interface{}]interface{}, options map[string]interface{}) *Definition {
+func newFromMap(mapDefinition map[interface{}]interface{}, options map[string]interface{}) *Definition {
 	return &Definition{
-		Context:   map_definition["context"].(string),
-		Resources: map_definition["resources"].([]map[interface{}]interface{}),
+		Context:   mapDefinition["context"].(string),
+		Resources: mapDefinition["resources"].([]map[interface{}]interface{}),
 		Options:   options,
 	}
 }

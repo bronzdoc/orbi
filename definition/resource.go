@@ -70,12 +70,12 @@ func (f *File) Create(options map[string]interface{}) error {
 
 	// TODO improve how a definition.template and a definition.File interacts
 	if f.isContentEmpty() {
-		templates_path := viper.GetString("TemplatesPath")
+		templatesPath := viper.GetString("TemplatesPath")
 
 		// Check if there is a template for the file
-		if f.hasTemplate(templates_path) {
+		if f.hasTemplate(templatesPath) {
 			vars := options["vars"].(map[string]string)
-			path := templates_path + "/" + f.name
+			path := templatesPath + "/" + f.name
 
 			content, err := ioutil.ReadFile(path)
 			if err != nil {
@@ -107,8 +107,8 @@ func (f *File) isContentEmpty() bool {
 	return f.content == nil
 }
 
-func (f *File) hasTemplate(templates_path string) bool {
-	_, err := os.Stat(templates_path + "/" + f.name)
+func (f *File) hasTemplate(templatesPath string) bool {
+	_, err := os.Stat(templatesPath + "/" + f.name)
 	return err == nil
 }
 

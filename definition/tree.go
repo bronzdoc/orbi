@@ -5,11 +5,11 @@ type Tree struct {
 }
 
 // Creates a definition tree structure
-func NewTree(context string, definition_resources []map[interface{}]interface{}) *Tree {
+func NewTree(context string, definitionResources []map[interface{}]interface{}) *Tree {
 	resource := &Directory{
 		name:     context,
 		id:       context,
-		children: generate(context, definition_resources),
+		children: generate(context, definitionResources),
 	}
 	return &Tree{root: resource}
 }
@@ -36,28 +36,28 @@ func traverse(r Resource, action func(r Resource)) {
 }
 
 // Generates a definition Resource hierarchy
-func generate(resource_id string, definition_resources []map[interface{}]interface{}) []Resource {
+func generate(resourceId string, definitionResources []map[interface{}]interface{}) []Resource {
 	var resources []Resource
-	for _, resource := range definition_resources {
-		for key, data := range resource {
+	for _, resource := range definitionResources {
+		for key, value := range resource {
 			if key == "dir" {
-				a_data := data.(map[interface{}]interface{})
-				name := a_data["name"].(string)
-				id := resource_id + "/" + name
+				data := value.(map[interface{}]interface{})
+				name := data["name"].(string)
+				id := resourceId + "/" + name
 
-				dir_resources := []map[interface{}]interface{}{
-					a_data,
+				dirResources := []map[interface{}]interface{}{
+					data,
 				}
 
 				resources = append(resources, &Directory{
 					name:     name,
 					id:       id,
-					children: generate(id, dir_resources),
+					children: generate(id, dirResources),
 				})
 
 			} else if key == "files" {
-				a_data := data.([]interface{})
-				files := getFileResources(resource_id, filesStringify(a_data))
+				data := value.([]interface{})
+				files := getFileResources(resourceId, filesStringify(data))
 				resources = append(resources, files...)
 			}
 		}
@@ -66,10 +66,10 @@ func generate(resource_id string, definition_resources []map[interface{}]interfa
 }
 
 // Convert a []string to []Resource
-func getFileResources(resource_id string, file_names []string) []Resource {
+func getFileResources(resourceId string, fileNames []string) []Resource {
 	var resources []Resource
-	for _, file := range file_names {
-		id := resource_id + "/" + file
+	for _, file := range fileNames {
+		id := resourceId + "/" + file
 		resources = append(resources, &File{
 			name: file,
 			id:   id,
@@ -79,10 +79,10 @@ func getFileResources(resource_id string, file_names []string) []Resource {
 }
 
 // Convert a []interface{} to []string
-func filesStringify(file_names []interface{}) []string {
+func filesStringify(fileNames []interface{}) []string {
 	var files []string
-	for _, file_name := range file_names {
-		files = append(files, file_name.(string))
+	for _, fileName := range fileNames {
+		files = append(files, fileName.(string))
 	}
 	return files
 }

@@ -24,9 +24,9 @@ func New(definition *definition.Definition) *Plan {
 	}
 }
 
-func PlanFactory(plan_name string, options map[string]interface{}) *Plan {
-	definition_path := fmt.Sprintf("%s/%s/definition.yml", viper.GetString("PlansPath"), plan_name)
-	definition := definition.New(definition_path, options)
+func PlanFactory(planName string, options map[string]interface{}) *Plan {
+	definitionPath := fmt.Sprintf("%s/%s/definition.yml", viper.GetString("PlansPath"), planName)
+	definition := definition.New(definitionPath, options)
 	return New(definition)
 }
 
@@ -35,26 +35,26 @@ func (p *Plan) Execute() error {
 }
 
 func List() (list []string) {
-	plans_path := viper.GetString("PlansPath")
-	files, _ := ioutil.ReadDir(plans_path)
+	plansPath := viper.GetString("PlansPath")
+	files, _ := ioutil.ReadDir(plansPath)
 	for _, f := range files {
 		list = append(list, f.Name())
 	}
 	return list
 }
 
-func Edit(plan_name string) error {
-	if !planExists(plan_name) {
-		return fmt.Errorf(`plan "%s" doesn't exists.`, plan_name)
+func Edit(planName string) error {
+	if !planExists(planName) {
+		return fmt.Errorf(`plan "%s" doesn't exists.`, planName)
 	}
 
 	editor := os.Getenv("EDITOR")
 	if editor == "" {
-		return fmt.Errorf(`$EDITOR is empty, could not edit "%s" plan.`, plan_name)
+		return fmt.Errorf(`$EDITOR is empty, could not edit "%s" plan.`, planName)
 	}
 
-	definition_path := fmt.Sprintf("%s/%s/definition.yml", viper.GetString("PlansPath"), plan_name)
-	cmd := ExecCommand(editor, definition_path)
+	definitionPath := fmt.Sprintf("%s/%s/definition.yml", viper.GetString("PlansPath"), planName)
+	cmd := ExecCommand(editor, definitionPath)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -71,12 +71,12 @@ func Edit(plan_name string) error {
 }
 
 // Get a definition object for a new plan
-func PlanDefinition(plan_name string, options map[string]interface{}) *definition.Definition {
+func PlanDefinition(planName string, options map[string]interface{}) *definition.Definition {
 	// Default structure for a new plan
 	resources := []map[interface{}]interface{}{
 		{
 			"dir": map[interface{}]interface{}{
-				"name": plan_name,
+				"name": planName,
 				"dir": map[interface{}]interface{}{
 					"name": "templates",
 				},
@@ -87,13 +87,13 @@ func PlanDefinition(plan_name string, options map[string]interface{}) *definitio
 		},
 	}
 
-	map_definition := map[interface{}]interface{}{
+	mapDefinition := map[interface{}]interface{}{
 		"context":   viper.GetString("PlansPath"),
 		"resources": resources,
 	}
 
-	def := definition.New(map_definition, options)
-	resource := def.Search(plan_name + "/" + "definition.yml")
+	def := definition.New(mapDefinition, options)
+	resource := def.Search(planName + "/" + "definition.yml")
 
 	file := resource.(*definition.File)
 	file.SetContent(
@@ -109,15 +109,15 @@ resources:
 	return def
 }
 
-func Get(plan_url string) error {
-	return Clone(plan_url)
+func Get(planUrl string) error {
+	return Clone(planUrl)
 }
 
-func planExists(plan_name string) bool {
-	plans_path := viper.GetString("PlansPath")
-	files, _ := ioutil.ReadDir(plans_path)
+func planExists(planName string) bool {
+	plansPath := viper.GetString("PlansPath")
+	files, _ := ioutil.ReadDir(plansPath)
 	for _, f := range files {
-		if f.Name() == plan_name {
+		if f.Name() == planName {
 			return true
 		}
 	}

@@ -55,35 +55,35 @@ func (t *Template) Vars() map[string]string {
 }
 
 func (t *Template) validateVars() error {
-	var_names, err := findVars(string(t.content))
+	varNames, err := findVars(string(t.content))
 	if err != nil {
 		return fmt.Errorf("findVars: %s", err)
 	}
 
-	var missing_vars []string
-	for _, name := range var_names {
+	var missingVars []string
+	for _, name := range varNames {
 		key := name
 		if _, ok := t.vars[key]; !ok {
-			missing_vars = append(missing_vars, key)
+			missingVars = append(missingVars, key)
 		}
 	}
 
-	if len(missing_vars) > 0 {
-		var err_msg bytes.Buffer
-		for _, missing_var := range missing_vars {
-			err_msg.WriteString("  {{" + "." + missing_var + "}}\n")
+	if len(missingVars) > 0 {
+		var errMsg bytes.Buffer
+		for _, missingVar := range missingVars {
+			errMsg.WriteString("  {{" + "." + missingVar + "}}\n")
 		}
 
 		return fmt.Errorf(
 			"%s: missing vars:\n%s",
 			t.name,
-			err_msg.String(),
+			errMsg.String(),
 		)
 	}
 	return nil
 }
 
-func findVars(template_content string) ([]string, error) {
+func findVars(templateContent string) ([]string, error) {
 	var vars []string
 
 	regex, err := regexp.Compile(`{[^}]*}`)
@@ -91,7 +91,7 @@ func findVars(template_content string) ([]string, error) {
 		return vars, fmt.Errorf("regexp.Compile %s", err)
 	}
 
-	matches := regex.FindAllString(template_content, -1)
+	matches := regex.FindAllString(templateContent, -1)
 
 	regex, err = regexp.Compile(`[a-zA-Z0-9_-]+`)
 	if err != nil {
@@ -99,8 +99,8 @@ func findVars(template_content string) ([]string, error) {
 	}
 
 	for _, match := range matches {
-		var_name := regex.FindString(match)
-		vars = append(vars, var_name)
+		varName := regex.FindString(match)
+		vars = append(vars, varName)
 	}
 
 	return vars, nil

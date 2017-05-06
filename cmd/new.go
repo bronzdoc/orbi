@@ -13,10 +13,10 @@ var newCmd = &cobra.Command{
 	Use:   "new PLAN",
 	Short: "Creates a new plan",
 	Run: func(cmd *cobra.Command, args []string) {
-		var plan_name string
+		var planName string
 
 		if len(args) > 0 {
-			plan_name = args[0]
+			planName = args[0]
 		} else {
 			err := fmt.Errorf("orbi plan new expects a plan name, see orbi plan new --help")
 			log.Fatal(err)
@@ -24,12 +24,12 @@ var newCmd = &cobra.Command{
 
 		// Dinamically plan templates path
 		viper.Set("TemplatesPath", fmt.Sprintf(
-			"%s/%s/%s", viper.GetString("PlansPath"), viper.GetString("TemplatesDir"), plan_name,
+			"%s/%s/%s", viper.GetString("PlansPath"), viper.GetString("TemplatesDir"), planName,
 		))
 
 		options := map[string]interface{}{}
 
-		definition := plan.PlanDefinition(plan_name, options)
+		definition := plan.PlanDefinition(planName, options)
 		plan.New(definition).Execute()
 	},
 }

@@ -14,10 +14,10 @@ var execCmd = &cobra.Command{
 	Use:   "exec PLAN",
 	Short: "Executes a plan",
 	Run: func(cmd *cobra.Command, args []string) {
-		var plan_name string
+		var planName string
 
 		if len(args) > 0 {
-			plan_name = args[0]
+			planName = args[0]
 		} else {
 			err := fmt.Errorf("orbi exec expects a plan name, see orbi exec --help")
 			log.Fatal(err)
@@ -30,14 +30,14 @@ var execCmd = &cobra.Command{
 
 		// Dinamically plan templates path
 		viper.Set("TemplatesPath", fmt.Sprintf(
-			"%s/%s/%s", viper.GetString("PlansPath"), plan_name, viper.GetString("TemplatesDir"),
+			"%s/%s/%s", viper.GetString("PlansPath"), planName, viper.GetString("TemplatesDir"),
 		))
 
 		options := map[string]interface{}{
 			"vars": vars,
 		}
 
-		plan := plan.PlanFactory(plan_name, options)
+		plan := plan.PlanFactory(planName, options)
 
 		if err := plan.Execute(); err != nil {
 			log.Fatal(err)
