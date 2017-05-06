@@ -40,7 +40,7 @@ func (d *Definition) Create() error {
 	// Check definition context exists
 	if _, err := os.Stat(tree.Root().Id()); err != nil {
 		return fmt.Errorf(
-			"Definition Create: Expected context:%s to exist",
+			`Definition Create: Expected context: "%s" to exist.`,
 			tree.Root().Name(),
 		)
 	}
