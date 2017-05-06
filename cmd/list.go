@@ -12,7 +12,7 @@ var listCmd = &cobra.Command{
 	Short: "List plans",
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, plan := range plan.List() {
-			fmt.Println(plan)
+			fmt.Printf("⚫ %s\n", plan)
 		}
 	},
 }
