@@ -1,24 +1,28 @@
 ---
   language: go
-  sudo: false
+  sudo: required
   notifications:
     email: true
   go:
     - 1.7
     - tip
+  before_install:
+    - sudo add-apt-repository ppa:masterminds/glide -y
+    - sudo apt-get update -q
+    - sudo apt-get install glide -y
+    - glide install
   install:
     - go get github.com/golang/lint/golint
   script:
-    - go build -v
-    - go vet $(go list ./... | grep -v vendor)
-    - test -z "$(golint ./... | grep -v vendor | tee /dev/stderr)"
-    - test -z "$(gofmt -s -l . | grep -v vendor | tee /dev/stderr)"
-    - go test $(go list ./... | grep -v vendor)
+    - make fmt
+    - make lint
+    - make vet
+    - make test
     - make release
   deploy:
     provider: releases
     api_key:
-      secure: ""
+      secure: bYzbnOyHisOvBF7z76RycVYlU1uJ2HBMpZe7R40CV7bpFrUPRRxmRD9hTpUqGoMZLD5jQHB2DXYGbP3zx2/bg21arqeDNBbW9Lioi9nE1jxgIQyMV/uTmK78/47Uvc5yocnP+jym4GNxRbKuwtrCr/T19MsSljZOBEOoDTPx2S2O1bs1sKaKlu31PpE1WYOCOdHj0AENSyQocoK/jVOlmPMiBT9gmk6kHs/cT21k/xdAHbQsPggZGWGO7pUBtyGGfqB/ZivuDomf2JrVxIrwwH1IkUpcNxuv6ai1JddsKCfT8OE0wCBHuxkyBYIqGeCQyLVjJzDQ5jEaFjGv7kcNDZQXOiGvDa4XnpCUyYWx7zMdw4UW8NK1MP78JqGYCUW1np6CEjBXOUo9hHGUc8U8JFD+GfoZlTC+57zoBwfhXRG53a47H7Bb6Rr5q4aTUp3lmsecz15V/rEoVUehKGobOpdZZIwiaopCQS8GwxhV4zPqDZSYQ2fga4w34X8VUr0dC9LP32IA2tmOS0fHgObHuhLnfdixdqJogV4g2LlTAiE6ETjwLBRYDN9Eza/a0rfHnLMRuOVfQ0nZkIeQrinCh+c07mjYkgZlekJl29C2f8cbyA19Qt5EUPmLlhAWcerijUX6EuKs10JVztowGCzVXWaL1kJFVnf6ZURk4mOnW0Y=
     go: 1.7
     file:
       - cross/orbi-darwin-386
