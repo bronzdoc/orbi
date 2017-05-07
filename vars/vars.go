@@ -8,7 +8,7 @@ import (
 // Parse parses a vars string i.e "var_name=value"
 func Parse(str string) (map[string]string, error) {
 	vars := make(map[string]string)
-	regex, err := regexp.Compile(`\s?[a-zA-Z_.-]+\s*=\s*.+`)
+	regex, err := regexp.Compile(`\s?[a-zA-Z_.-]+\s*=\s*[^\s]+`)
 
 	if err != nil {
 		return vars, err

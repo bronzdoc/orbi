@@ -13,8 +13,7 @@ var _ = Describe("Vars", func() {
 	Describe("Parse", func() {
 		It("Should parse a string with vars correctly", func() {
 			strvars := `
-			ninja_turtle=donatello
-			logan = wolverine
+			ninja_turtle=donatello logan = wolverine
 			gandalf= magneto
 			cat-dog = nickelodeon
 			homer.simpson=Doh!
