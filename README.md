@@ -3,10 +3,10 @@
 
 > Project structure generator.
 
-Generate project structures using yaml and language agnostic templates.
+Generate project structures using yaml and golang templating.
 
 # Install
-> NOTE: orbi just works with unix-like operating systems, windows is not supported for now.
+> NOTE: orbi just works with \*nix operating systems, windows is not supported for now.
 
 ### Binaries
 
@@ -23,8 +23,6 @@ $ go get github/bronzdoc/orbi
 # Usage
 
 Orbi defines project structures using a `definition.yml`.
-
-e.g:
 
 ```yaml
 ---
@@ -68,11 +66,9 @@ my_plan
 └── templates
 ```
 
-You can notice a `templates` directory, your templates go there...
+You can notice a `templates` directory, this is where your templates should be.
 
-In order tu template a file all you need to do is create a file named the same as a file resource.
-
-e.g:
+In order to template a file all you need to do is create a file named the same as a file resource.
 
 ```yaml
 context: .
@@ -87,7 +83,7 @@ resources:
     └── file_a
 ```
 
-Ok, so we have a plan with our definition and templates, so how we create all that stuff we defined?
+Ok, we have a plan with a definition.yml and templates, so... how we create all that stuff we defined?
 
 All you need to do is tell orbi to execute a `plan`:
 
@@ -95,13 +91,11 @@ All you need to do is tell orbi to execute a `plan`:
 $ orbi exec my_plan
 ```
 
-this command will generate the file structure defined in your plan definition.
+this command will generate the file structure defined in your plan definition.yml.
 
-If your plan templates happen to have variables, you can pass arguments to those variables with the `--vars` flag.
+If your plan templates happen to have variables, you can pass values to those variables with the `--vars` flag.
 
-e.g:
-
-in `.orbi/plans/tiesto/templates/file_a`
+in `.orbi/plans/my_plan/templates/file_a`
 
 ```
 {{.name}} is awesome
@@ -112,12 +106,11 @@ $ orbi exec my_plan --vars="name=Tarantino"
 ```
 
 that command will generate the file named `file_a` with content `Tarantino is awesome`.
+> NOTE: you can also pass a KEY=VALUE variables file with `--vars-file`
 
 
 ### Sharing plans
-orbi let you dowload a plan from a repository with the `orbi plan get` command
-
-e.g:
+orbi let you download a plan from a repository with the `orbi plan get` command
 
 **ssh:**
 ```shell
@@ -131,4 +124,4 @@ $ orbi plan get my_plan https://user@github.com/user/plan_name.git
 
 ## Contributing
 
-Contributions are greatly appreciated, and encouraged
+Contributions are greatly appreciated and encouraged, see [CONTRIBUTING](https://github.com/bronzdoc/orbi/blob/master/CONTRIBUTING.md)
