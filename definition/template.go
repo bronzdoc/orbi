@@ -92,7 +92,8 @@ func (t *Template) validateVars() error {
 func findVars(templateContent string) ([]string, error) {
 	var vars []string
 
-	regex, err := regexp.Compile(`{[^}]*}`)
+	regex, err := regexp.Compile(`{{\s*\.[^}]*}}`)
+
 	if err != nil {
 		return vars, fmt.Errorf("regexp.Compile %s", err)
 	}
@@ -106,8 +107,19 @@ func findVars(templateContent string) ([]string, error) {
 
 	for _, match := range matches {
 		varName := regex.FindString(match)
-		vars = append(vars, varName)
+		if !varInSlice(varName, vars) {
+			vars = append(vars, varName)
+		}
 	}
 
 	return vars, nil
+}
+
+func varInSlice(varName string, varSlice []string) bool {
+	for _, val := range varSlice {
+		if val == varName {
+			return true
+		}
+	}
+	return false
 }

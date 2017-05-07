@@ -31,23 +31,45 @@ var _ = Describe("Template", func() {
 		Context("Content has vars", func() {
 			content := []byte(`
 				{{.var_1}}: Gor-la… Gor-lo-mi? Per cortesia, me lo ripeti ancora?
-				{{.var_2}}: Gorlami!`,
+				{{.var_2}}: Gorlami!
+				{{  .var_3  }}: It's not about the money, is about sending a message
+				{{  .var_3  }}: Why so serious?
+				test {
+					bronz: {doc},
+					{
+				{} test {fsdsfsdsd}}
+				. test {}}}
+				`,
 			)
 
 			It("should fill variables in template correctly", func() {
 				template := NewTemplate("template_1", content, map[string]string{
 					"var_1": "Col. Hans Landa",
 					"var_2": "Lt. Aldo Raine",
+					"var_3": "The Joker",
 				})
 
-				file, _ := os.Create("./tmp/some-other-file")
-				template.Execute(file)
+				file, err := os.Create("./tmp/some-other-file")
+				Expect(err).To(BeNil())
+
+				_, err = template.Execute(file)
+				Expect(err).To(BeNil())
 
 				expected_content := `
 				Col. Hans Landa: Gor-la… Gor-lo-mi? Per cortesia, me lo ripeti ancora?
-				Lt. Aldo Raine: Gorlami!`
+				Lt. Aldo Raine: Gorlami!
+				The Joker: It's not about the money, is about sending a message
+				The Joker: Why so serious?
+				test {
+					bronz: {doc},
+					{
+				{} test {fsdsfsdsd}}
+				. test {}}}
+				`
 
-				actual_content, _ := ioutil.ReadFile("./tmp/some-other-file")
+				actual_content, err := ioutil.ReadFile("./tmp/some-other-file")
+				Expect(err).To(BeNil())
+
 				Expect(string(actual_content)).To(Equal(expected_content))
 			})
 
@@ -57,7 +79,7 @@ var _ = Describe("Template", func() {
 
 				_, err := template.Execute(file)
 				Expect(err).ToNot(Equal(nil))
-				Expect(err.Error()).To(Equal("validateVars: template_2: missing vars:\n  {{.var_1}}\n  {{.var_2}}\n"))
+				Expect(err.Error()).To(Equal("validateVars: template_2: missing vars:\n  {{.var_1}}\n  {{.var_2}}\n  {{.var_3}}\n"))
 			})
 		})
 	})
