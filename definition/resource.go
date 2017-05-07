@@ -74,7 +74,7 @@ func (f *File) Create(options map[string]interface{}) error {
 	file, err := os.Create(f.id)
 
 	if err != nil {
-		return fmt.Errorf("File Create: ", err)
+		return fmt.Errorf("File Create: %s", err)
 	}
 	defer file.Close()
 
@@ -89,12 +89,12 @@ func (f *File) Create(options map[string]interface{}) error {
 
 			content, err := ioutil.ReadFile(path)
 			if err != nil {
-				return fmt.Errorf("File Create: ", err)
+				return fmt.Errorf("File Create: %s", err)
 			}
 
 			_, err = NewTemplate(f.name, content, vars).Execute(file)
 			if err != nil {
-				return fmt.Errorf("File Create: ", err)
+				return fmt.Errorf("File Create: %s", err)
 			}
 		}
 	} else {

@@ -131,7 +131,7 @@ func equal(a, b *Definition) bool {
 
 	for i := range a_names {
 		if a_names[i] != b_names[i] {
-			fmt.Printf("a not equal b\n", a_names[i], b_names[i])
+			fmt.Printf("%s not equal %s\n", a_names[i], b_names[i])
 			return false
 		}
 	}

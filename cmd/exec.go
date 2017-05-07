@@ -31,7 +31,7 @@ var execCmd = &cobra.Command{
 			if varsPathExists(templateVarsPath) {
 				fileContent, err := ioutil.ReadFile(templateVarsPath)
 				if err != nil {
-					log.Fatalf("vars-file: ", err)
+					log.Fatalf("vars-file: %s", err)
 				}
 
 				templateVars = string(fileContent)

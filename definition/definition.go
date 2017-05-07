@@ -57,7 +57,7 @@ func (d *Definition) Create() error {
 
 	for err := range errChan {
 		if err != nil {
-			return fmt.Errorf("Definition Create: ", err)
+			return fmt.Errorf("Definition Create: %s", err)
 		}
 	}
 

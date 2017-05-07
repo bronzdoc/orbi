@@ -57,6 +57,11 @@ test: ## Runs the go tests
 	@echo "+ $@"
 	@go test -v -tags "$(BUILDTAGS) cgo" $(shell go list ./... | grep -v vendor)
 
+.PHONY: vet
+vet: ## Verifies `go vet` passes
+	@echo "+ $@"
+	@go vet $(shell go list ./... | grep -v vendor) | tee /dev/stderr
+
 .PHONY: install
 install: ## Installs the executable or package
 	@echo "+ $@"
